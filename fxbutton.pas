@@ -6,16 +6,16 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
-  fxcontainer, BGRABitmap, BGRABitmapTypes, BGRAOpenGL;
+  FXContainer, LMessages, LCLType, BGRABitmap, BGRABitmapTypes, BGRAOpenGL;
 
 type
 
   TFXButtonState = (fxbHovered, fxbActive);
   TFXButtonStates = set of TFXButtonState;
 
-  { TFXButton }
+  { TCustomFXButton }
 
-  TFXButton = class(TGraphicControl, IFXDrawable)
+  TCustomFXButton = class(TGraphicControl, IFXDrawable)
   private
     fx: TBGLBitmap;
     FState: TFXButtonStates;
@@ -29,12 +29,50 @@ type
     procedure FXInvalidateParent;
     procedure FXDraw;
     procedure Draw;
-  public
     procedure Paint; override;
+    procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
+  public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
-  published
+  end;
 
+  TFXButton = class(TCustomFXButton)
+  published
+    property Action;
+    property Align;
+    property Anchors;
+    property AutoSize;
+    property BidiMode;
+    property BorderSpacing;
+    property Caption;
+    property Constraints;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Enabled;
+    property Font;
+    property ParentBidiMode;
+    property OnChangeBounds;
+    property OnClick;
+    property OnContextPopup;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDrag;
+    property OnMouseDown;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnMouseWheel;
+    property OnMouseWheelDown;
+    property OnMouseWheelUp;
+    property OnResize;
+    property OnStartDrag;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowHint;
+    property Visible;
   end;
 
 procedure Register;
@@ -46,58 +84,51 @@ begin
   RegisterComponents('BGRA Controls FX', [TFXButton]);
 end;
 
-{ TFXButton }
+{ TCustomFXButton }
 
-procedure TFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: integer);
+procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
+  X, Y: integer);
 begin
   FState := FState + [fxbActive];
   FXInvalidateParent;
   inherited MouseDown(Button, Shift, X, Y);
 end;
 
-procedure TFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: integer);
+procedure TCustomFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
+  X, Y: integer);
 begin
   FState := FState - [fxbActive];
   FXInvalidateParent;
   inherited MouseUp(Button, Shift, X, Y);
 end;
 
-procedure TFXButton.MouseEnter;
+procedure TCustomFXButton.MouseEnter;
 begin
   FState := FState + [fxbHovered];
   FXInvalidateParent;
   inherited MouseEnter;
 end;
 
-procedure TFXButton.MouseLeave;
+procedure TCustomFXButton.MouseLeave;
 begin
   FState := FState - [fxbHovered];
   FXInvalidateParent;
   inherited MouseLeave;
 end;
 
-procedure TFXButton.FXInvalidateParent;
+procedure TCustomFXButton.FXInvalidateParent;
 begin
   if Parent is TFXContainer then
     TFXContainer(Parent).DoOnPaint;
 end;
 
-procedure TFXButton.Paint;
-begin
-  inherited Paint;
-  if (csDesigning in ComponentState) then
-  begin
-    Canvas.Rectangle(0, 0, Width, Height);
-  end;
-end;
-
-procedure TFXButton.FXDraw;
+procedure TCustomFXButton.FXDraw;
 begin
   Draw;
   BGLCanvas.PutImage(Left, Top, fx.Texture);
 end;
 
-procedure TFXButton.Draw;
+procedure TCustomFXButton.Draw;
 begin
   if (Width <> fx.Width) and (Height <> fx.Height) then
     fx.SetSize(Width, Height);
@@ -132,13 +163,32 @@ begin
   end;
 end;
 
-constructor TFXButton.Create(TheOwner: TComponent);
+procedure TCustomFXButton.Paint;
+begin
+  inherited Paint;
+  if (csDesigning in ComponentState) then
+  begin
+    Canvas.Pen.Color := clBlack;
+    Canvas.Rectangle(0, 0, Width, Height);
+  end;
+end;
+
+procedure TCustomFXButton.WMPaint(var Message: TLMPaint);
+begin
+  if (csDesigning in ComponentState) then
+  begin
+    Canvas.Pen.Color := clBlack;
+    Canvas.Rectangle(0, 0, Width, Height);
+  end;
+end;
+
+constructor TCustomFXButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   fx := TBGLBitmap.Create;
 end;
 
-destructor TFXButton.Destroy;
+destructor TCustomFXButton.Destroy;
 begin
   FreeAndNil(fx);
   inherited Destroy;

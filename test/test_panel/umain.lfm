@@ -6,18 +6,21 @@ object frmMain: TfrmMain
   Caption = 'BGRA Controls FX'
   ClientHeight = 240
   ClientWidth = 320
-  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   LCLVersion = '1.7'
-  object FXPanel1: TFXContainer
-    Left = 8
-    Height = 224
-    Top = 8
-    Width = 304
+  object FXContainer1: TFXContainer
+    Left = 0
+    Height = 240
+    Top = 0
+    Width = 320
+    Align = alClient
+    OnPaint = FXContainer1Paint
     object FXButton1: TFXButton
       Left = 9
       Height = 64
       Top = 8
       Width = 127
+      OnClick = FXButton1Click
     end
     object FXButton2: TFXButton
       Left = 9
@@ -30,6 +33,7 @@ object frmMain: TfrmMain
       Height = 64
       Top = 8
       Width = 127
+      Enabled = False
     end
   end
 end
