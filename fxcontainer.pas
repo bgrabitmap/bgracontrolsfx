@@ -128,7 +128,7 @@ begin
   ControlStyle := ControlStyle + [csAcceptsControls, csCaptureMouse,
     csClickEvents, csSetCaption, csDoubleClicks, csReplicatable,
     csNoFocus, csAutoSize0x0] - [csOpaque];
-  AutoResizeViewport := true;
+  AutoResizeViewport := True;
   fx := TBGLBitmap.Create;
 end;
 

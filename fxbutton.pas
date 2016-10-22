@@ -5,8 +5,8 @@ unit FXButton;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
-  FXContainer, LMessages, LCLType, BGRABitmap, BGRABitmapTypes, BGRAOpenGL;
+  Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Types,
+  FXContainer, BGRABitmapTypes, BGRAOpenGL;
 
 type
 
@@ -20,6 +20,11 @@ type
     fx: TBGLBitmap;
     FState: TFXButtonStates;
   protected
+    procedure CalculatePreferredSize(var PreferredWidth, PreferredHeight: integer;
+    {%H-}WithThemeSpace: boolean); override;
+    class function GetControlClassDefaultSize: TSize; override;
+    procedure TextChanged; override;
+  protected
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
       X, Y: integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: integer); override;
@@ -29,8 +34,6 @@ type
     procedure FXInvalidateParent;
     procedure FXDraw;
     procedure Draw;
-    procedure Paint; override;
-    procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -86,6 +89,29 @@ end;
 
 { TCustomFXButton }
 
+procedure TCustomFXButton.CalculatePreferredSize(
+  var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
+begin
+  PreferredWidth := 150;
+  PreferredHeight := 50;
+end;
+
+class function TCustomFXButton.GetControlClassDefaultSize: TSize;
+begin
+  Result := inherited GetControlClassDefaultSize;
+end;
+
+procedure TCustomFXButton.TextChanged;
+begin
+  InvalidatePreferredSize;
+  if Assigned(Parent) and Parent.AutoSize then
+    Parent.AdjustSize;
+  AdjustSize;
+  if not (csDesigning in ComponentState) and not (csLoading in ComponentState) then
+    FXInvalidateParent;
+  inherited TextChanged;
+end;
+
 procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
@@ -129,6 +155,8 @@ begin
 end;
 
 procedure TCustomFXButton.Draw;
+var
+  style: TTextStyle;
 begin
   if (Width <> fx.Width) and (Height <> fx.Height) then
     fx.SetSize(Width, Height);
@@ -161,31 +189,18 @@ begin
   begin
     fx.Fill(BGRA(25, 25, 25, 255));
   end;
-end;
 
-procedure TCustomFXButton.Paint;
-begin
-  inherited Paint;
-  if (csDesigning in ComponentState) then
-  begin
-    Canvas.Pen.Color := clBlack;
-    Canvas.Rectangle(0, 0, Width, Height);
-  end;
-end;
+  style.Alignment := taCenter;
 
-procedure TCustomFXButton.WMPaint(var Message: TLMPaint);
-begin
-  if (csDesigning in ComponentState) then
-  begin
-    Canvas.Pen.Color := clBlack;
-    Canvas.Rectangle(0, 0, Width, Height);
-  end;
+  fx.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
 end;
 
 constructor TCustomFXButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   fx := TBGLBitmap.Create;
+  with GetControlClassDefaultSize do
+    SetInitialBounds(0, 0, CX, CY);
 end;
 
 destructor TCustomFXButton.Destroy;

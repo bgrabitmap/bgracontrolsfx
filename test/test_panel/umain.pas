@@ -6,8 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  FXContainer, FXButton, BGRABitmap, BGRABitmapTypes, BGRAOpenGL,
-  BGLVirtualScreen;
+  FXContainer, FXButton, BGRABitmap, BGRABitmapTypes, BGRAOpenGL;
 
 type
 
@@ -20,6 +19,7 @@ type
     FXContainer1: TFXContainer;
     procedure FormDestroy(Sender: TObject);
     procedure FXButton1Click(Sender: TObject);
+    procedure FXButton2Click(Sender: TObject);
     procedure FXContainer1Paint(Sender: TObject);
   private
     bg: TBGLBitmap;
@@ -38,6 +38,11 @@ begin
   ShowMessage('Hello World!');
 end;
 
+procedure TfrmMain.FXButton2Click(Sender: TObject);
+begin
+  FXButton2.Caption := 'You did it.';
+end;
+
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(bg);
@@ -46,12 +51,16 @@ end;
 procedure TfrmMain.FXContainer1Paint(Sender: TObject);
 begin
   if bg = nil then
-    bg := TBGLBitmap.Create(Width, Height);
+    bg := TBGLBitmap.Create;
 
   if (bg.Width <> FXContainer1.Width) or (bg.Height <> FXContainer1.Height) then
+  begin
     bg.SetSize(FXContainer1.Width, FXContainer1.Height);
+    bg.GradientFill(0, 0, FXContainer1.Width, FXContainer1.Height,
+      BGRABlack, BGRAWhite, gtLinear, PointF(0, 0), PointF(0, FXContainer1.Height),
+      dmSet, False);
+  end;
 
-  bg.GradientFill(0, 0, FXContainer1.Width, FXContainer1.Height, BGRABlack, BGRAWhite, gtLinear, PointF(0, 0), PointF(0, FXContainer1.Height), dmSet, False);
   BGLCanvas.PutImage(0, 0, bg.Texture);
 end;
 

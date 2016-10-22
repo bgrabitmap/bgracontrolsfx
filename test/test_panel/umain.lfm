@@ -14,12 +14,14 @@ object frmMain: TfrmMain
     Top = 0
     Width = 320
     Align = alClient
+    AutoResizeViewport = True
     OnPaint = FXContainer1Paint
     object FXButton1: TFXButton
       Left = 9
       Height = 64
       Top = 8
       Width = 127
+      Caption = 'Hello'
       OnClick = FXButton1Click
     end
     object FXButton2: TFXButton
@@ -27,12 +29,15 @@ object frmMain: TfrmMain
       Height = 64
       Top = 80
       Width = 127
+      Caption = 'Other'
+      OnClick = FXButton2Click
     end
     object FXButton3: TFXButton
       Left = 144
       Height = 64
       Top = 8
       Width = 127
+      Caption = 'Third'
       Enabled = False
     end
   end

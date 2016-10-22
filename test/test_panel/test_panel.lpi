@@ -54,19 +54,13 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="2">
       <Item1>
-        <PackageName Value="BGLControls"/>
+        <PackageName Value="BGRAControlsFX"/>
       </Item1>
       <Item2>
-        <PackageName Value="bgracontrols"/>
-      </Item2>
-      <Item3>
-        <PackageName Value="BGRAControlsFX"/>
-      </Item3>
-      <Item4>
         <PackageName Value="LCL"/>
-      </Item4>
+      </Item2>
     </RequiredPackages>
     <Units Count="2">
       <Unit0>
