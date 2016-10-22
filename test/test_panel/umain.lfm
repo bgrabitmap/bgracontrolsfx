@@ -1,0 +1,24 @@
+object frmMain: TfrmMain
+  Left = 462
+  Height = 240
+  Top = 146
+  Width = 320
+  Caption = 'BGRA Controls FX'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '1.7'
+  object FXPanel1: TFXPanel
+    Left = 8
+    Height = 224
+    Top = 8
+    Width = 304
+    object FXPanel2: TFXPanel
+      Left = 16
+      Height = 90
+      Top = 16
+      Width = 160
+    end
+  end
+end
