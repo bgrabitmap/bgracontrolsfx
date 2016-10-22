@@ -14,11 +14,11 @@ object frmMain: TfrmMain
     Height = 224
     Top = 8
     Width = 304
-    object FXPanel2: TFXPanel
-      Left = 16
-      Height = 90
-      Top = 16
-      Width = 160
+    object FXButton1: TFXButton
+      Left = 9
+      Height = 64
+      Top = 8
+      Width = 127
     end
   end
 end

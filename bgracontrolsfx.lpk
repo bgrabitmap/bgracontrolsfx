@@ -11,12 +11,17 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="1">
+    <Files Count="2">
       <Item1>
         <Filename Value="fxpanel.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="FXPanel"/>
       </Item1>
+      <Item2>
+        <Filename Value="fxbutton.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="FXButton"/>
+      </Item2>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>
