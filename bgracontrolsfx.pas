@@ -8,13 +8,13 @@ unit BGRAControlsFX;
 interface
 
 uses
-  FXPanel, FXButton, LazarusPackageIntf;
+  fxcontainer, FXButton, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
-  RegisterUnit('FXPanel', @FXPanel.Register);
+  RegisterUnit('fxcontainer', @fxcontainer.Register);
   RegisterUnit('FXButton', @FXButton.Register);
 end;
 

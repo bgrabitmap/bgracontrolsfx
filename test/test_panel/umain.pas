@@ -5,8 +5,8 @@ unit umain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, FXPanel, FXButton;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, FXContainer, FXButton;
 
 type
 
@@ -14,11 +14,10 @@ type
 
   TfrmMain = class(TForm)
     FXButton1: TFXButton;
-    FXPanel1: TFXPanel;
+    FXButton2: TFXButton;
+    FXButton3: TFXButton;
+    FXPanel1: TFXContainer;
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-  private
-    ContextAssigned: boolean;
   public
     procedure HelloWorld(Sender: TObject);
   end;
@@ -32,16 +31,6 @@ implementation
 
 { TfrmMain }
 
-procedure TfrmMain.FormShow(Sender: TObject);
-begin
-  { ToDo: Move this to the FXPanel if possible }
-  {if not ContextAssigned then
-  begin
-    FXPanel1.AssignContext;
-    ContextAssigned := True;
-  end;}
-end;
-
 procedure TfrmMain.HelloWorld(Sender: TObject);
 begin
   ShowMessage('Hello World!');
@@ -49,10 +38,8 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FXButton1.OnClick:=@HelloWorld;
-
-  //ContextAssigned := False;
+  FXButton1.OnClick := @HelloWorld;
+  FXButton2.Enabled := False;
 end;
 
 end.
-

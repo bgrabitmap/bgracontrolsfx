@@ -13,9 +13,9 @@
     </CompilerOptions>
     <Files Count="2">
       <Item1>
-        <Filename Value="fxpanel.pas"/>
+        <Filename Value="fxcontainer.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="FXPanel"/>
+        <UnitName Value="fxcontainer"/>
       </Item1>
       <Item2>
         <Filename Value="fxbutton.pas"/>

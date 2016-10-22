@@ -7,15 +7,26 @@ object frmMain: TfrmMain
   ClientHeight = 240
   ClientWidth = 320
   OnCreate = FormCreate
-  OnShow = FormShow
   LCLVersion = '1.7'
-  object FXPanel1: TFXPanel
+  object FXPanel1: TFXContainer
     Left = 8
     Height = 224
     Top = 8
     Width = 304
     object FXButton1: TFXButton
       Left = 9
+      Height = 64
+      Top = 8
+      Width = 127
+    end
+    object FXButton2: TFXButton
+      Left = 9
+      Height = 64
+      Top = 80
+      Width = 127
+    end
+    object FXButton3: TFXButton
+      Left = 144
       Height = 64
       Top = 8
       Width = 127
