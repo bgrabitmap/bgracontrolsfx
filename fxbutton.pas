@@ -20,6 +20,7 @@ type
     FBGRA: TBGRABitmap;
     fx: TBGLBitmap;
     FState: TFXButtonStates;
+    FNeedDraw: boolean;
   protected
     procedure CalculatePreferredSize(var PreferredWidth, PreferredHeight: integer;
     {%H-}WithThemeSpace: boolean); override;
@@ -109,6 +110,7 @@ begin
   if Assigned(Parent) and Parent.AutoSize then
     Parent.AdjustSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
   inherited TextChanged;
@@ -118,6 +120,7 @@ procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
   FState := FState + [fxbActive];
+  FNeedDraw := True;
   FXInvalidate;
   inherited MouseDown(Button, Shift, X, Y);
 end;
@@ -126,6 +129,7 @@ procedure TCustomFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
   FState := FState - [fxbActive];
+  FNeedDraw := True;
   FXInvalidate;
   inherited MouseUp(Button, Shift, X, Y);
 end;
@@ -133,6 +137,7 @@ end;
 procedure TCustomFXButton.MouseEnter;
 begin
   FState := FState + [fxbHovered];
+  FNeedDraw := True;
   FXInvalidate;
   inherited MouseEnter;
 end;
@@ -140,6 +145,7 @@ end;
 procedure TCustomFXButton.MouseLeave;
 begin
   FState := FState - [fxbHovered];
+  FNeedDraw := True;
   FXInvalidate;
   inherited MouseLeave;
 end;
@@ -178,41 +184,49 @@ var
   style: TTextStyle;
 begin
   if (Width <> FBGRA.Width) and (Height <> FBGRA.Height) then
+  begin
+    FNeedDraw := True;
     FBGRA.SetSize(Width, Height);
-
-  FBGRA.FillTransparent;
-
-  if Enabled then
-  begin
-    { Button Down }
-    if fxbActive in FState then
-    begin
-      FBGRA.Fill(BGRA(50, 50, 50, 255));
-    end
-    else
-    begin
-      { Button Hovered }
-      if fxbHovered in FState then
-      begin
-        FBGRA.Fill(BGRA(200, 200, 200, 255));
-      end
-      { Button Normal }
-      else
-      begin
-        FBGRA.Fill(BGRA(125, 125, 125, 255));
-      end;
-    end;
-  end
-  { Button Disabled }
-  else
-  begin
-    FBGRA.Fill(BGRA(25, 25, 25, 255));
   end;
 
-  style.Alignment := taCenter;
-  style.Layout := tlCenter;
+  if FNeedDraw then
+  begin
+    FBGRA.FillTransparent;
 
-  FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+    if Enabled then
+    begin
+      { Button Down }
+      if fxbActive in FState then
+      begin
+        FBGRA.Fill(BGRA(50, 50, 50, 255));
+      end
+      else
+      begin
+        { Button Hovered }
+        if fxbHovered in FState then
+        begin
+          FBGRA.Fill(BGRA(200, 200, 200, 255));
+        end
+        { Button Normal }
+        else
+        begin
+          FBGRA.Fill(BGRA(125, 125, 125, 255));
+        end;
+      end;
+    end
+    { Button Disabled }
+    else
+    begin
+      FBGRA.Fill(BGRA(25, 25, 25, 255));
+    end;
+
+    style.Alignment := taCenter;
+    style.Layout := tlCenter;
+
+    FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+
+    FNeedDraw := False;
+  end;
 end;
 
 constructor TCustomFXButton.Create(TheOwner: TComponent);

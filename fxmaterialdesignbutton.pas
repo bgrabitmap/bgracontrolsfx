@@ -538,7 +538,9 @@ begin
 
       FNeedDraw := False;
     end;
-  end;
+  end
+  else
+    FBGRA.FillTransparent;
 end;
 
 constructor TFXMaterialDesignButton.Create(AOwner: TComponent);
@@ -570,7 +572,6 @@ begin
   FTextStyle := [];
   FTextFont := 'default';
   FTextQuality := fqFineAntialiasing;
-  FNeedDraw := True;
 end;
 
 destructor TFXMaterialDesignButton.Destroy;

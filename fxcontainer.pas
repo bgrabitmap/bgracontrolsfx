@@ -99,20 +99,23 @@ var
 begin
   Include(FControlState, csCustomPaint);
   inherited WMPaint(Message);
-  if (csDesigning in ComponentState) and (FCanvas<>nil) then begin
-      if Message.DC <> 0 then
-        FCanvas.Handle := Message.DC;
+  if (csDesigning in ComponentState) and (FCanvas <> nil) then
+  begin
+    if Message.DC <> 0 then
+      FCanvas.Handle := Message.DC;
 
-      FCanvas.Brush.Color := clWhite;
-      FCanvas.FillRect(0, 0, Width, Height);
+    FCanvas.Brush.Color := clWhite;
+    FCanvas.FillRect(0, 0, Width, Height);
 
-      for i := 0 to ControlCount - 1 do
-        if Controls[i].GetInterface(SFXDrawable, IFX) then
-          IFX.FXPreview(FCanvas);
+    for i := 0 to ControlCount - 1 do
+      if Controls[i].GetInterface(SFXDrawable, IFX) then
+        IFX.FXPreview(FCanvas);
 
-      if Message.DC <> 0 then
-        FCanvas.Handle := 0;
-  end else begin
+    if Message.DC <> 0 then
+      FCanvas.Handle := 0;
+  end
+  else
+  begin
     Paint;
   end;
   Exclude(FControlState, csCustomPaint);
@@ -149,11 +152,13 @@ begin
 
   AutoResizeViewport := True;
 
-  if (csDesigning in ComponentState) then begin
+  if (csDesigning in ComponentState) then
+  begin
     FCanvas := TControlCanvas.Create;
     TControlCanvas(FCanvas).Control := Self;
-  end else
-    FCompStyle:=csNonLCL;
+  end
+  else
+    FCompStyle := csNonLCL;
 end;
 
 destructor TCustomFXContainer.Destroy;
