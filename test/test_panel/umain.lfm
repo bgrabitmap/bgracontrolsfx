@@ -43,13 +43,21 @@ object frmMain: TfrmMain
     end
     object FXMaterialDesignButton1: TFXMaterialDesignButton
       Left = 144
-      Height = 283
-      Top = 80
-      Width = 488
-      ShadowColor = clAqua
+      Height = 272
+      Top = 88
+      Width = 472
+      RoundBorders = 100
+      NormalColor = clSilver
+      NormalColorEffect = clWhite
+      ShadowColor = clSkyBlue
+      ShadowSize = 70
+      TextColor = clWhite
+      TextSize = 30
+      TextShadowSize = 10
+      TextStyle = [fsBold, fsItalic]
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
-      Caption = 'Material Design'
+      Caption = 'Hello World'
     end
   end
 end

@@ -430,20 +430,23 @@ begin
   OutX := Round(FBGRA.Width / 2) - Round(OutTxtSize.cx / 2);
   OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
 
-  bmpSdw := TBGRABitmap.Create(OutTxtSize.cx + 2 * FTextShadowSize,
-    OutTxtSize.cy + 2 * FTextShadowSize);
-  bmpSdw.FontAntialias := True;
-  bmpSdw.FontHeight := TextSize;
-  bmpSdw.FontStyle := TextStyle;
-  bmpSdw.FontName := TextFont;
-  bmpSdw.FontQuality := TextQuality;
+  if FTextShadow then
+  begin
+    bmpSdw := TBGRABitmap.Create(OutTxtSize.cx + 2 * FTextShadowSize,
+      OutTxtSize.cy + 2 * FTextShadowSize);
+    bmpSdw.FontAntialias := True;
+    bmpSdw.FontHeight := TextSize;
+    bmpSdw.FontStyle := TextStyle;
+    bmpSdw.FontName := TextFont;
+    bmpSdw.FontQuality := TextQuality;
 
-  bmpSdw.TextOut(FTextShadowSize, FTextShadowSize, Caption, FTextShadowColor);
-  BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize, rbFast));
-  FBGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
-    FTextShadowOffSetY - FTextShadowSize, bmpSdw,
-    dmDrawWithTransparency);
-  bmpSdw.Free;
+    bmpSdw.TextOut(FTextShadowSize, FTextShadowSize, Caption, FTextShadowColor);
+    BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize, rbFast));
+    FBGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
+      FTextShadowOffSetY - FTextShadowSize, bmpSdw,
+      dmDrawWithTransparency);
+    bmpSdw.Free;
+  end;
 
   FBGRA.TextOut(OutX, OutY, Caption, FTextColor);
 end;
@@ -518,7 +521,8 @@ begin
         round_rect_height := Height;
       end;
 
-      FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width, round_rect_height,
+      FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width,
+        round_rect_height,
         FRoundBorders, FRoundBorders, temp, [rrDefault], False);
 
       temp.Free;
