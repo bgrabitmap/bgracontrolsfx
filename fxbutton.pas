@@ -37,6 +37,7 @@ type
     procedure FXDraw;
     procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw;
+    procedure Paint; override;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -156,10 +157,12 @@ begin
     Invalidate;
 
   if Parent is TFXContainer then
-  begin
+    begin
     if TFXContainer(Parent).ReceivePaintFrom = nil then
       Parent.Invalidate;
-  end;
+    end
+  else
+    Invalidate;
 end;
 
 procedure TCustomFXButton.FXDraw;
@@ -228,6 +231,12 @@ begin
     FNeedDraw := False;
     FTexture := nil;
   end;
+end;
+
+procedure TCustomFXButton.Paint;
+begin
+  Draw;
+  FBGRA.Draw(Canvas, 0, 0, False);
 end;
 
 constructor TCustomFXButton.Create(TheOwner: TComponent);

@@ -70,6 +70,7 @@ type
     procedure FXDraw;
     procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw;
+    procedure Paint; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -460,7 +461,9 @@ begin
   begin
     if TFXContainer(Parent).ReceivePaintFrom = nil then
       Parent.Invalidate;
-  end;
+  end
+  else
+    Invalidate;
 end;
 
 procedure TFXMaterialDesignButton.FXDraw;
@@ -542,6 +545,12 @@ begin
   end
   else
     FBGRA.FillTransparent;
+end;
+
+procedure TFXMaterialDesignButton.Paint;
+begin
+  Draw;
+  FBGRA.Draw(Canvas, 0, 0, False);
 end;
 
 constructor TFXMaterialDesignButton.Create(AOwner: TComponent);
