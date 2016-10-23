@@ -37,6 +37,7 @@ type
     FCircleSize: single;
     FCircleAlpha: byte;
     fx: TBGLBitmap;
+    FNeedDraw: boolean;
     procedure SetFNormalColor(AValue: TColor);
     procedure SetFNormalColorEffect(AValue: TColor);
     procedure SetFRoundBorders(AValue: single);
@@ -192,6 +193,7 @@ begin
   if FTextColor = AValue then
     Exit;
   FTextColor := AValue;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -203,6 +205,7 @@ begin
   FTextFont := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -214,6 +217,7 @@ begin
   FTextQuality := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -225,6 +229,7 @@ begin
   FTextShadow := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -246,6 +251,7 @@ begin
   FTextShadowOffsetX := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -257,6 +263,7 @@ begin
   FTextShadowOffsetY := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -268,6 +275,7 @@ begin
   FTextShadowSize := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -279,6 +287,7 @@ begin
   FTextSize := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -290,6 +299,7 @@ begin
   FTextStyle := AValue;
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -327,6 +337,7 @@ begin
   if FNormalColor = AValue then
     Exit;
   FNormalColor := AValue;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -348,6 +359,8 @@ end;
 
 procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
 begin
+  FNeedDraw := True;
+
   if Width > Height then
     FCircleSize := FCircleSize + (Width div 15)
   else
@@ -382,6 +395,7 @@ procedure TFXMaterialDesignButton.TextChanged;
 begin
   InvalidatePreferredSize;
   AdjustSize;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -397,6 +411,7 @@ begin
     BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize,
       FShadowSize, rbFast) as TBGRABitmap);
   end;
+  FNeedDraw := True;
 end;
 
 procedure TFXMaterialDesignButton.DrawTextShadow(AHeight: integer);
@@ -479,41 +494,45 @@ begin
       UpdateShadow;
     end;
 
-    FBGRA.FillTransparent;
-    if FShadow then
-      FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
-
-    temp := TBGRABitmap.Create(Width, Height, FNormalColor);
-    temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
-      ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
-      ColorToBGRA(FNormalColorEffect, FCircleAlpha));
-
-    if FShadow then
+    if FNeedDraw then
     begin
-      round_rect_left := FShadowSize;
-      round_rect_width := Width - FShadowSize;
-      round_rect_height := Height - FShadowSize;
-    end
-    else
-    begin
-      round_rect_left := 0;
-      round_rect_width := Width;
-      round_rect_height := Height;
-    end;
-
-
-    FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width, round_rect_height,
-      FRoundBorders, FRoundBorders, temp, [rrDefault], False);
-
-    temp.Free;
-
-    if Caption <> '' then
-    begin
+      FBGRA.FillTransparent;
       if FShadow then
-        text_height := Height - FShadowSize
+        FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
+
+      temp := TBGRABitmap.Create(Width, Height, FNormalColor);
+      temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
+        ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
+        ColorToBGRA(FNormalColorEffect, FCircleAlpha));
+
+      if FShadow then
+      begin
+        round_rect_left := FShadowSize;
+        round_rect_width := Width - FShadowSize;
+        round_rect_height := Height - FShadowSize;
+      end
       else
-        text_height := Height;
-      DrawTextShadow(text_height);
+      begin
+        round_rect_left := 0;
+        round_rect_width := Width;
+        round_rect_height := Height;
+      end;
+
+      FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width, round_rect_height,
+        FRoundBorders, FRoundBorders, temp, [rrDefault], False);
+
+      temp.Free;
+
+      if Caption <> '' then
+      begin
+        if FShadow then
+          text_height := Height - FShadowSize
+        else
+          text_height := Height;
+        DrawTextShadow(text_height);
+      end;
+
+      FNeedDraw := False;
     end;
   end;
 end;
@@ -547,6 +566,7 @@ begin
   FTextStyle := [];
   FTextFont := 'default';
   FTextQuality := fqFineAntialiasing;
+  FNeedDraw := True;
 end;
 
 destructor TFXMaterialDesignButton.Destroy;
