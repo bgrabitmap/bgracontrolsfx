@@ -18,17 +18,22 @@
       </CodeGeneration>
     </CompilerOptions>
     <Version Minor="1"/>
-    <Files Count="2">
+    <Files Count="3">
       <Item1>
-        <Filename Value="fxcontainer.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="fxcontainer"/>
-      </Item1>
-      <Item2>
         <Filename Value="fxbutton.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="FXButton"/>
+      </Item1>
+      <Item2>
+        <Filename Value="fxcontainer.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="fxcontainer"/>
       </Item2>
+      <Item3>
+        <Filename Value="fxmaterialdesignbutton.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="FXMaterialDesignButton"/>
+      </Item3>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>
