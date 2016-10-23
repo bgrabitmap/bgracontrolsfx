@@ -548,6 +548,7 @@ begin
   inherited Create(AOwner);
   with GetControlClassDefaultSize do
     SetInitialBounds(0, 0, CX, CY);
+  AutoSize := True;
   FTimer := TTimer.Create(Self);
   FTimer.Interval := 15;
   FTimer.Enabled := False;

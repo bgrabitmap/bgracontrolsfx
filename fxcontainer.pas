@@ -40,6 +40,7 @@ type
     property Anchors;
     property AutoResizeViewport;
     property BorderSpacing;
+    property Color;
     property Enabled;
     {$IFDEF HasRGBBits}
     property RedBits;
@@ -104,7 +105,7 @@ begin
     if Message.DC <> 0 then
       FCanvas.Handle := Message.DC;
 
-    FCanvas.Brush.Color := clWhite;
+    FCanvas.Brush.Color := Color;
     FCanvas.FillRect(0, 0, Width, Height);
 
     for i := 0 to ControlCount - 1 do
@@ -136,7 +137,7 @@ begin
   if (csDesigning in ComponentState) then
     exit;
 
-  BGLViewPort(Width, Height, BGRAWhite);
+  BGLViewPort(Width, Height, Color);
   inherited DoOnPaint;
   DrawChilds;
   SwapBuffers;
@@ -161,6 +162,7 @@ begin
     FCompStyle := csNonLCL;
 
   Align := alClient;
+  Color := clWhite;
 end;
 
 destructor TCustomFXContainer.Destroy;
