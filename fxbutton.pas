@@ -210,6 +210,7 @@ begin
   end;
 
   style.Alignment := taCenter;
+  style.Layout := tlCenter;
 
   FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
 end;
