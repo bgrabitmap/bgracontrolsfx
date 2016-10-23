@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Types,
-  FXContainer, BGRABitmapTypes, BGRAOpenGL;
+  FXContainer, BGRABitmap, BGRABitmapTypes, BGRAOpenGL;
 
 type
 
@@ -17,6 +17,7 @@ type
 
   TCustomFXButton = class(TGraphicControl, IFXDrawable)
   private
+    FBGRA: TBGRABitmap;
     fx: TBGLBitmap;
     FState: TFXButtonStates;
   protected
@@ -31,8 +32,9 @@ type
     procedure MouseEnter; override;
     procedure MouseLeave; override;
   protected
-    procedure FXInvalidateParent;
+    procedure FXInvalidate;
     procedure FXDraw;
+    procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw;
   public
     constructor Create(TheOwner: TComponent); override;
@@ -107,8 +109,8 @@ begin
   if Assigned(Parent) and Parent.AutoSize then
     Parent.AdjustSize;
   AdjustSize;
-  if not (csDesigning in ComponentState) and not (csLoading in ComponentState) then
-    FXInvalidateParent;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
   inherited TextChanged;
 end;
 
@@ -116,7 +118,7 @@ procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
   FState := FState + [fxbActive];
-  FXInvalidateParent;
+  FXInvalidate;
   inherited MouseDown(Button, Shift, X, Y);
 end;
 
@@ -124,80 +126,98 @@ procedure TCustomFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
   FState := FState - [fxbActive];
-  FXInvalidateParent;
+  FXInvalidate;
   inherited MouseUp(Button, Shift, X, Y);
 end;
 
 procedure TCustomFXButton.MouseEnter;
 begin
   FState := FState + [fxbHovered];
-  FXInvalidateParent;
+  FXInvalidate;
   inherited MouseEnter;
 end;
 
 procedure TCustomFXButton.MouseLeave;
 begin
   FState := FState - [fxbHovered];
-  FXInvalidateParent;
+  FXInvalidate;
   inherited MouseLeave;
 end;
 
-procedure TCustomFXButton.FXInvalidateParent;
+procedure TCustomFXButton.FXInvalidate;
 begin
+  if (csDesigning in ComponentState) then
+    Invalidate;
+
   if Parent is TFXContainer then
     TFXContainer(Parent).DoOnPaint;
 end;
 
 procedure TCustomFXButton.FXDraw;
 begin
+  if (csDesigning in ComponentState) then
+    exit;
+
   Draw;
+  if (Width <> fx.Width) and (Height <> fx.Height) then
+    fx.SetSize(Width, Height);
+
+  fx.FillTransparent;
+  fx.PutImage(0, 0, FBGRA, dmDrawWithTransparency);
   BGLCanvas.PutImage(Left, Top, fx.Texture);
+end;
+
+procedure TCustomFXButton.FXPreview(var aCanvas: TCanvas);
+begin
+  Draw;
+  FBGRA.Draw(aCanvas, Left, Top, False);
 end;
 
 procedure TCustomFXButton.Draw;
 var
   style: TTextStyle;
 begin
-  if (Width <> fx.Width) and (Height <> fx.Height) then
-    fx.SetSize(Width, Height);
+  if (Width <> FBGRA.Width) and (Height <> FBGRA.Height) then
+    FBGRA.SetSize(Width, Height);
 
-  fx.FillTransparent;
+  FBGRA.FillTransparent;
 
   if Enabled then
   begin
     { Button Down }
     if fxbActive in FState then
     begin
-      fx.Fill(BGRA(50, 50, 50, 255));
+      FBGRA.Fill(BGRA(50, 50, 50, 255));
     end
     else
     begin
       { Button Hovered }
       if fxbHovered in FState then
       begin
-        fx.Fill(BGRA(200, 200, 200, 255));
+        FBGRA.Fill(BGRA(200, 200, 200, 255));
       end
       { Button Normal }
       else
       begin
-        fx.Fill(BGRA(125, 125, 125, 255));
+        FBGRA.Fill(BGRA(125, 125, 125, 255));
       end;
     end;
   end
   { Button Disabled }
   else
   begin
-    fx.Fill(BGRA(25, 25, 25, 255));
+    FBGRA.Fill(BGRA(25, 25, 25, 255));
   end;
 
   style.Alignment := taCenter;
 
-  fx.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+  FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
 end;
 
 constructor TCustomFXButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  FBGRA := TBGRABitmap.Create;
   fx := TBGLBitmap.Create;
   with GetControlClassDefaultSize do
     SetInitialBounds(0, 0, CX, CY);
@@ -205,6 +225,7 @@ end;
 
 destructor TCustomFXButton.Destroy;
 begin
+  FreeAndNil(FBGRA);
   FreeAndNil(fx);
   inherited Destroy;
 end;

@@ -31,11 +31,12 @@ type
     FTextSize: integer;
     FTextStyle: TFontStyles;
     FTimer: TTimer;
-    FBGRA: TBGLBitmap;
-    FBGRAShadow: TBGLBitmap;
+    FBGRA: TBGRABitmap;
+    FBGRAShadow: TBGRABitmap;
     FMousePos: TPoint;
     FCircleSize: single;
     FCircleAlpha: byte;
+    fx: TBGLBitmap;
     procedure SetFNormalColor(AValue: TColor);
     procedure SetFNormalColorEffect(AValue: TColor);
     procedure SetFRoundBorders(AValue: single);
@@ -63,8 +64,9 @@ type
     procedure TextChanged; override;
     procedure UpdateShadow;
   protected
-    procedure FXInvalidateParent;
+    procedure FXInvalidate;
     procedure FXDraw;
+    procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw;
   public
     constructor Create(AOwner: TComponent); override;
@@ -133,18 +135,12 @@ procedure Register;
 
 implementation
 
-procedure BGLReplace(var Destination: TBGLBitmap; Temp: TObject);
-begin
-  Destination.Free;
-  Destination := Temp as TBGLBitmap;
-end;
-
-procedure DrawTextShadow(bmpOut: TBGLBitmap; AWidth, AHeight: integer;
+procedure DrawTextShadow(bmpOut: TBGRABitmap; AWidth, AHeight: integer;
   AText: string; AFontHeight: integer; ATextColor, AShadowColor: TBGRAPixel;
   AOffSetX, AOffSetY: integer; ARadius: integer = 0; AFontStyle: TFontStyles = [];
   AFontName: string = 'Default'; AFontQuality: TBGRAFontQuality = fqFineAntialiasing);
 var
-  bmpSdw: TBGLBitmap;
+  bmpSdw: TBGRABitmap;
   OutTxtSize: TSize;
   OutX, OutY: integer;
 begin
@@ -158,7 +154,7 @@ begin
   OutX := Round(AWidth / 2) - Round(OutTxtSize.cx / 2);
   OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
 
-  bmpSdw := TBGLBitmap.Create(OutTxtSize.cx + 2 * ARadius, OutTxtSize.cy +
+  bmpSdw := TBGRABitmap.Create(OutTxtSize.cx + 2 * ARadius, OutTxtSize.cy +
     2 * ARadius);
   bmpSdw.FontAntialias := True;
   bmpSdw.FontHeight := AFontHeight;
@@ -167,7 +163,7 @@ begin
   bmpSdw.FontQuality := AFontQuality;
 
   bmpSdw.TextOut(ARadius, ARadius, AText, AShadowColor);
-  BGLReplace(bmpSdw, bmpSdw.FilterBlurRadial(ARadius, rbFast));
+  BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(ARadius, rbFast));
   bmpOut.PutImage(OutX + AOffSetX - ARadius, OutY + AOffSetY - ARadius, bmpSdw,
     dmDrawWithTransparency);
   bmpSdw.Free;
@@ -189,7 +185,7 @@ begin
   FRoundBorders := AValue;
   UpdateShadow;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFShadow(AValue: boolean);
@@ -201,7 +197,7 @@ begin
   AdjustSize;
   UpdateShadow;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFShadowColor(AValue: TColor);
@@ -211,7 +207,7 @@ begin
   FShadowColor := AValue;
   UpdateShadow;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFShadowSize(AValue: integer);
@@ -223,7 +219,7 @@ begin
   AdjustSize;
   UpdateShadow;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextColor(AValue: TColor);
@@ -232,7 +228,7 @@ begin
     Exit;
   FTextColor := AValue;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextFont(AValue: string);
@@ -243,7 +239,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextQuality(AValue: TBGRAFontQuality);
@@ -254,7 +250,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextShadow(AValue: boolean);
@@ -265,7 +261,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextShadowColor(AValue: TColor);
@@ -275,7 +271,7 @@ begin
   FTextShadowColor := AValue;
   UpdateShadow;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextShadowOffsetX(AValue: integer);
@@ -286,7 +282,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextShadowOffsetY(AValue: integer);
@@ -297,7 +293,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextShadowSize(AValue: integer);
@@ -308,7 +304,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextSize(AValue: integer);
@@ -319,7 +315,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFTextStyle(AValue: TFontStyles);
@@ -330,7 +326,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.CalculatePreferredSize(
@@ -367,7 +363,7 @@ begin
     Exit;
   FNormalColor := AValue;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.SetFNormalColorEffect(AValue: TColor);
@@ -376,7 +372,7 @@ begin
     Exit;
   FNormalColorEffect := AValue;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.OnStartTimer(Sender: TObject);
@@ -399,7 +395,7 @@ begin
   if FCircleAlpha <= 0 then
     FTimer.Enabled := False;
   if not (csLoading in ComponentState) then
-    FXInvalidateParent;
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.MouseDown(Button: TMouseButton;
@@ -421,8 +417,8 @@ procedure TFXMaterialDesignButton.TextChanged;
 begin
   InvalidatePreferredSize;
   AdjustSize;
-  if not (csDesigning in ComponentState) and not (csLoading in ComponentState) then
-    FXInvalidateParent;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
 end;
 
 procedure TFXMaterialDesignButton.UpdateShadow;
@@ -433,26 +429,43 @@ begin
     FBGRAShadow.RoundRectAntialias(FShadowSize, FShadowSize, Width - FShadowSize,
       Height - FShadowSize, FRoundBorders, FRoundBorders,
       FShadowColor, 1, FShadowColor, [rrDefault]);
-    BGLReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize,
-      FShadowSize, rbFast) as TBGLBitmap);
+    BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize,
+      FShadowSize, rbFast) as TBGRABitmap);
   end;
 end;
 
-procedure TFXMaterialDesignButton.FXInvalidateParent;
+procedure TFXMaterialDesignButton.FXInvalidate;
 begin
+  if (csDesigning in ComponentState) then
+    Invalidate;
+
   if Parent is TFXContainer then
     TFXContainer(Parent).DoOnPaint;
 end;
 
 procedure TFXMaterialDesignButton.FXDraw;
 begin
+  if (csDesigning in ComponentState) then
+    exit;
+
   Draw;
-  BGLCanvas.PutImage(Left, Top, FBGRA.Texture);
+  if (fx.Width <> Width) or (fx.Height <> Height) then
+    fx.SetSize(Width, Height);
+
+  fx.FillTransparent;
+  fx.PutImage(0, 0, FBGRA, dmDrawWithTransparency);
+  BGLCanvas.PutImage(Left, Top, fx.Texture);
+end;
+
+procedure TFXMaterialDesignButton.FXPreview(var aCanvas: TCanvas);
+begin
+  Draw;
+  FBGRA.Draw(aCanvas, Left, Top, False);
 end;
 
 procedure TFXMaterialDesignButton.Draw;
 var
-  temp: TBGLBitmap;
+  temp: TBGRABitmap;
   round_rect_left: integer;
   round_rect_width: integer;
   round_rect_height: integer;
@@ -471,7 +484,7 @@ begin
     if FShadow then
       FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
 
-    temp := TBGLBitmap.Create(Width, Height, FNormalColor);
+    temp := TBGRABitmap.Create(Width, Height, FNormalColor);
     temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
       ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
       ColorToBGRA(FNormalColorEffect, FCircleAlpha));
@@ -518,8 +531,9 @@ begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := @OnStartTimer;
   FTimer.OnTimer := @OnTimer;
-  FBGRA := TBGLBitmap.Create(Width, Height);
-  FBGRAShadow := TBGLBitmap.Create(Width, Height);
+  FBGRA := TBGRABitmap.Create(Width, Height);
+  FBGRAShadow := TBGRABitmap.Create(Width, Height);
+  fx := TBGLBitmap.Create;
   FRoundBorders := 5;
   FNormalColor := clWhite;
   FNormalColorEffect := clSilver;
@@ -545,6 +559,7 @@ begin
   FTimer.OnTimer := nil;
   FreeAndNil(FBGRA);
   FreeAndNil(FBGRAShadow);
+  FreeAndNil(fx);
   inherited Destroy;
 end;
 

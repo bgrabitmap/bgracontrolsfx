@@ -1,23 +1,24 @@
 object frmMain: TfrmMain
-  Left = 462
-  Height = 449
-  Top = 146
+  Left = 630
+  Height = 445
+  Top = 159
   Width = 783
   Caption = 'BGRA Controls FX'
-  ClientHeight = 449
+  ClientHeight = 445
   ClientWidth = 783
   OnDestroy = FormDestroy
+  Position = poScreenCenter
   LCLVersion = '1.7'
   object FXContainer1: TFXContainer
     Left = 0
-    Height = 449
+    Height = 445
     Top = 0
     Width = 783
     Align = alClient
     AutoResizeViewport = True
     OnPaint = FXContainer1Paint
     object FXButton1: TFXButton
-      Left = 9
+      Left = 8
       Height = 64
       Top = 8
       Width = 127
@@ -25,7 +26,7 @@ object frmMain: TfrmMain
       OnClick = FXButton1Click
     end
     object FXButton2: TFXButton
-      Left = 9
+      Left = 8
       Height = 64
       Top = 80
       Width = 127
@@ -42,9 +43,9 @@ object frmMain: TfrmMain
     end
     object FXMaterialDesignButton1: TFXMaterialDesignButton
       Left = 144
-      Height = 319
+      Height = 283
       Top = 80
-      Width = 520
+      Width = 488
       ShadowColor = clAqua
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
