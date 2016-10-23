@@ -156,7 +156,10 @@ begin
     Invalidate;
 
   if Parent is TFXContainer then
-    TFXContainer(Parent).DoOnPaint;
+  begin
+    if TFXContainer(Parent).ReceivePaintFrom = nil then
+      TFXContainer(Parent).DoOnPaint;
+  end;
 end;
 
 procedure TCustomFXButton.FXDraw;

@@ -1,0 +1,98 @@
+object frmMain: TfrmMain
+  Left = 462
+  Height = 531
+  Top = 146
+  Width = 347
+  Caption = 'BGRA Controls FX'
+  ClientHeight = 531
+  ClientWidth = 347
+  LCLVersion = '1.7'
+  object FXContainer1: TFXContainer
+    Left = 0
+    Height = 531
+    Top = 0
+    Width = 347
+    Align = alClient
+    AutoResizeViewport = True
+    Color = clWhite
+    object FXMaterialDesignButton1: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 8
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton1'
+    end
+    object FXMaterialDesignButton2: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 56
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton2'
+    end
+    object FXMaterialDesignButton3: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 104
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton3'
+    end
+    object FXMaterialDesignButton4: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 152
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton4'
+    end
+    object FXMaterialDesignButton5: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 200
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton5'
+    end
+    object FXMaterialDesignButton6: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 248
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton6'
+    end
+    object FXMaterialDesignButton7: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 296
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton7'
+    end
+    object FXMaterialDesignButton8: TFXMaterialDesignButton
+      Left = 0
+      Height = 42
+      Top = 344
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton8'
+    end
+  end
+  object Timer1: TTimer
+    Interval = 15
+    OnTimer = Timer1Timer
+    OnStartTimer = Timer1StartTimer
+    left = 383
+    top = 148
+  end
+end

@@ -16,6 +16,7 @@ object frmMain: TfrmMain
     Width = 783
     Align = alClient
     AutoResizeViewport = True
+    Color = clWhite
     OnPaint = FXContainer1Paint
     object FXButton1: TFXButton
       Left = 8
@@ -57,6 +58,45 @@ object frmMain: TfrmMain
       TextStyle = [fsBold, fsItalic]
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = True
+      Caption = 'Hello World'
+    end
+    object FXMaterialDesignButton2: TFXMaterialDesignButton
+      Left = 8
+      Height = 272
+      Top = 208
+      Width = 472
+      RoundBorders = 100
+      NormalColor = clSilver
+      NormalColorEffect = clWhite
+      ShadowColor = clSkyBlue
+      ShadowSize = 70
+      TextColor = clWhite
+      TextSize = 30
+      TextShadowSize = 10
+      TextStyle = [fsBold, fsItalic]
+      TextFont = 'default'
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = True
+      Caption = 'Hello World'
+    end
+    object FXMaterialDesignButton3: TFXMaterialDesignButton
+      Left = 376
+      Height = 272
+      Top = 224
+      Width = 472
+      RoundBorders = 100
+      NormalColor = clSilver
+      NormalColorEffect = clWhite
+      ShadowColor = clSkyBlue
+      ShadowSize = 70
+      TextColor = clWhite
+      TextSize = 30
+      TextShadowSize = 10
+      TextStyle = [fsBold, fsItalic]
+      TextFont = 'default'
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      AutoSize = True
       Caption = 'Hello World'
     end
   end

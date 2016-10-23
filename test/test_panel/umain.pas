@@ -19,6 +19,8 @@ type
     FXButton3: TFXButton;
     FXContainer1: TFXContainer;
     FXMaterialDesignButton1: TFXMaterialDesignButton;
+    FXMaterialDesignButton2: TFXMaterialDesignButton;
+    FXMaterialDesignButton3: TFXMaterialDesignButton;
     procedure FormDestroy(Sender: TObject);
     procedure FXButton1Click(Sender: TObject);
     procedure FXButton2Click(Sender: TObject);

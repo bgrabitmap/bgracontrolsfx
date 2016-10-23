@@ -25,6 +25,10 @@ type
   TCustomFXContainer = class(TCustomOpenGLControl)
   private
     FCanvas: TCanvas;
+    FLockReceivePaint: boolean;
+    FReceivePaintFrom: TComponent;
+    procedure SetFLockReceivePaint(AValue: boolean);
+    procedure SetFReceivePaintFrom(AValue: TComponent);
   protected
     procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
     procedure DrawChilds;
@@ -32,6 +36,9 @@ type
     procedure DoOnPaint; override;
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    property LockReceivePaint: boolean read FLockReceivePaint write SetFLockReceivePaint;
+    property ReceivePaintFrom: TComponent read FReceivePaintFrom
+      write SetFReceivePaintFrom;
   end;
 
   TFXContainer = class(TCustomFXContainer)
@@ -92,6 +99,22 @@ begin
 end;
 
 { TCustomFXContainer }
+
+procedure TCustomFXContainer.SetFReceivePaintFrom(AValue: TComponent);
+begin
+  if FLockReceivePaint then
+    exit;
+  if FReceivePaintFrom = AValue then
+    Exit;
+  FReceivePaintFrom := AValue;
+end;
+
+procedure TCustomFXContainer.SetFLockReceivePaint(AValue: boolean);
+begin
+  if FLockReceivePaint = AValue then
+    Exit;
+  FLockReceivePaint := AValue;
+end;
 
 procedure TCustomFXContainer.WMPaint(var Message: TLMPaint);
 var
@@ -163,6 +186,7 @@ begin
 
   Align := alClient;
   Color := clWhite;
+  FLockReceivePaint := False;
 end;
 
 destructor TCustomFXContainer.Destroy;

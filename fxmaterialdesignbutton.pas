@@ -59,6 +59,7 @@ type
     {%H-}WithThemeSpace: boolean); override;
     procedure OnStartTimer({%H-}Sender: TObject);
     procedure OnTimer({%H-}Sender: TObject);
+    procedure OnStopTimer({%H-}Sender: TObject);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
       X, Y: integer); override;
     class function GetControlClassDefaultSize: TSize; override;
@@ -355,6 +356,7 @@ procedure TFXMaterialDesignButton.OnStartTimer(Sender: TObject);
 begin
   FCircleAlpha := 255;
   FCircleSize := 0;
+  TFXContainer(Parent).ReceivePaintFrom := Self;
 end;
 
 procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
@@ -457,7 +459,12 @@ begin
     Invalidate;
 
   if Parent is TFXContainer then
-    TFXContainer(Parent).DoOnPaint;
+  begin
+    if (FTimer.Enabled) and (TFXContainer(Parent).ReceivePaintFrom = Self) then
+      TFXContainer(Parent).DoOnPaint
+    else if TFXContainer(Parent).ReceivePaintFrom = nil then
+      TFXContainer(Parent).DoOnPaint;
+  end;
 end;
 
 procedure TFXMaterialDesignButton.FXDraw;
@@ -554,6 +561,7 @@ begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := @OnStartTimer;
   FTimer.OnTimer := @OnTimer;
+  FTimer.OnStopTimer := @OnStopTimer;
   FBGRA := TBGRABitmap.Create(Width, Height);
   FBGRAShadow := TBGRABitmap.Create(Width, Height);
   fx := TBGLBitmap.Create;
@@ -579,11 +587,18 @@ destructor TFXMaterialDesignButton.Destroy;
 begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := nil;
+  FTimer.OnStopTimer := nil;
   FTimer.OnTimer := nil;
   FreeAndNil(FBGRA);
   FreeAndNil(FBGRAShadow);
   FreeAndNil(fx);
   inherited Destroy;
+end;
+
+procedure TFXMaterialDesignButton.OnStopTimer(Sender: TObject);
+begin
+  if TFXContainer(Parent).ReceivePaintFrom = Self then
+    TFXContainer(Parent).ReceivePaintFrom := nil;
 end;
 
 end.
