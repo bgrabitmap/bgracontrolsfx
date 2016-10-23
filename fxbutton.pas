@@ -18,7 +18,7 @@ type
   TCustomFXButton = class(TGraphicControl, IFXDrawable)
   private
     FBGRA: TBGRABitmap;
-    fx: TBGLBitmap;
+    FTexture: IBGLTexture;
     FState: TFXButtonStates;
     FNeedDraw: boolean;
   protected
@@ -168,12 +168,10 @@ begin
     exit;
 
   Draw;
-  if (Width <> fx.Width) and (Height <> fx.Height) then
-    fx.SetSize(Width, Height);
-
-  fx.FillTransparent;
-  fx.PutImage(0, 0, FBGRA, dmDrawWithTransparency);
-  BGLCanvas.PutImage(Left, Top, fx.Texture);
+  if (FTexture = nil) then
+    FTexture := BGLTexture(FBGRA);
+  BGLCanvas.PutImage(Left, Top, FTexture);
+  FTexture := nil;
 end;
 
 procedure TCustomFXButton.FXPreview(var aCanvas: TCanvas);
@@ -236,7 +234,6 @@ constructor TCustomFXButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FBGRA := TBGRABitmap.Create;
-  fx := TBGLBitmap.Create;
   with GetControlClassDefaultSize do
     SetInitialBounds(0, 0, CX, CY);
 end;
@@ -244,7 +241,6 @@ end;
 destructor TCustomFXButton.Destroy;
 begin
   FreeAndNil(FBGRA);
-  FreeAndNil(fx);
   inherited Destroy;
 end;
 

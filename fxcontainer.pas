@@ -47,6 +47,7 @@ type
     property Anchors;
     property AutoResizeViewport;
     property BorderSpacing;
+    property ChildSizing;
     property Color;
     property Enabled;
     {$IFDEF HasRGBBits}

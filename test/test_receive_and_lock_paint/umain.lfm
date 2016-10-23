@@ -6,6 +6,8 @@ object frmMain: TfrmMain
   Caption = 'BGRA Controls FX'
   ClientHeight = 531
   ClientWidth = 347
+  OnCreate = FormCreate
+  Position = poScreenCenter
   LCLVersion = '1.7'
   object FXContainer1: TFXContainer
     Left = 0
@@ -14,82 +16,111 @@ object frmMain: TfrmMain
     Width = 347
     Align = alClient
     AutoResizeViewport = True
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
     Color = clWhite
     object FXMaterialDesignButton1: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 8
-      Width = 216
+      Height = 67
+      Top = 0
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton1'
     end
     object FXMaterialDesignButton2: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 56
-      Width = 216
+      Height = 67
+      Top = 67
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton2'
     end
     object FXMaterialDesignButton3: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 104
-      Width = 216
+      Height = 67
+      Top = 134
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton3'
     end
     object FXMaterialDesignButton4: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 152
-      Width = 216
+      Height = 67
+      Top = 201
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton4'
     end
     object FXMaterialDesignButton5: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 200
-      Width = 216
+      Height = 67
+      Top = 268
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton5'
     end
     object FXMaterialDesignButton6: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 248
-      Width = 216
+      Height = 67
+      Top = 335
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton6'
     end
     object FXMaterialDesignButton7: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 296
-      Width = 216
+      Height = 67
+      Top = 402
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton7'
     end
     object FXMaterialDesignButton8: TFXMaterialDesignButton
       Left = 0
-      Height = 42
-      Top = 344
-      Width = 216
+      Height = 62
+      Top = 469
+      Width = 347
+      Shadow = False
+      TextShadow = False
       TextFont = 'default'
+      TextQuality = fqSystemClearType
       AutoSize = True
       Caption = 'FXMaterialDesignButton8'
     end
   end
   object Timer1: TTimer
-    Interval = 15
+    Enabled = False
+    Interval = 30
     OnTimer = Timer1Timer
     OnStartTimer = Timer1StartTimer
     left = 383

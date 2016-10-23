@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 630
+  Left = 37
   Height = 445
-  Top = 159
+  Top = 109
   Width = 783
   Caption = 'BGRA Controls FX'
   ClientHeight = 445
@@ -46,44 +46,6 @@ object frmMain: TfrmMain
       Left = 144
       Height = 272
       Top = 88
-      Width = 472
-      RoundBorders = 100
-      NormalColor = clSilver
-      NormalColorEffect = clWhite
-      ShadowColor = clSkyBlue
-      ShadowSize = 70
-      TextColor = clWhite
-      TextSize = 30
-      TextShadowSize = 10
-      TextStyle = [fsBold, fsItalic]
-      TextFont = 'default'
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      AutoSize = True
-      Caption = 'Hello World'
-    end
-    object FXMaterialDesignButton2: TFXMaterialDesignButton
-      Left = 8
-      Height = 272
-      Top = 208
-      Width = 472
-      RoundBorders = 100
-      NormalColor = clSilver
-      NormalColorEffect = clWhite
-      ShadowColor = clSkyBlue
-      ShadowSize = 70
-      TextColor = clWhite
-      TextSize = 30
-      TextShadowSize = 10
-      TextStyle = [fsBold, fsItalic]
-      TextFont = 'default'
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      AutoSize = True
-      Caption = 'Hello World'
-    end
-    object FXMaterialDesignButton3: TFXMaterialDesignButton
-      Left = 376
-      Height = 272
-      Top = 224
       Width = 472
       RoundBorders = 100
       NormalColor = clSilver

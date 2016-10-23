@@ -19,8 +19,6 @@ type
     FXButton3: TFXButton;
     FXContainer1: TFXContainer;
     FXMaterialDesignButton1: TFXMaterialDesignButton;
-    FXMaterialDesignButton2: TFXMaterialDesignButton;
-    FXMaterialDesignButton3: TFXMaterialDesignButton;
     procedure FormDestroy(Sender: TObject);
     procedure FXButton1Click(Sender: TObject);
     procedure FXButton2Click(Sender: TObject);
@@ -54,18 +52,8 @@ end;
 
 procedure TfrmMain.FXContainer1Paint(Sender: TObject);
 begin
-  if bg = nil then
-    bg := TBGLBitmap.Create;
-
-  if (bg.Width <> FXContainer1.Width) or (bg.Height <> FXContainer1.Height) then
-  begin
-    bg.SetSize(FXContainer1.Width, FXContainer1.Height);
-    bg.GradientFill(0, 0, FXContainer1.Width, FXContainer1.Height,
-      BGRABlack, BGRAWhite, gtLinear, PointF(0, 0), PointF(0, FXContainer1.Height),
-      dmSet, False);
-  end;
-
-  BGLCanvas.PutImage(0, 0, bg.Texture);
+  BGLCanvas.FillRectLinearColor(0, 0, FXContainer1.Width, FXContainer1.Height,
+    BGRABlack, BGRABlack, BGRAWhite, BGRAWhite);
 end;
 
 end.

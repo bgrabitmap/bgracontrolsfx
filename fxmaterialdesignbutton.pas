@@ -36,7 +36,7 @@ type
     FMousePos: TPoint;
     FCircleSize: single;
     FCircleAlpha: byte;
-    fx: TBGLBitmap;
+    FTexture: IBGLTexture;
     FNeedDraw: boolean;
     procedure SetFNormalColor(AValue: TColor);
     procedure SetFNormalColorEffect(AValue: TColor);
@@ -410,8 +410,8 @@ begin
     FBGRAShadow.RoundRectAntialias(FShadowSize, FShadowSize, Width - FShadowSize,
       Height - FShadowSize, FRoundBorders, FRoundBorders,
       FShadowColor, 1, FShadowColor, [rrDefault]);
-    BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize,
-      FShadowSize, rbFast) as TBGRABitmap);
+    BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize / sqrt(2),
+      FShadowSize / sqrt(2), rbBox) as TBGRABitmap);
   end;
   FNeedDraw := True;
 end;
@@ -473,12 +473,10 @@ begin
     exit;
 
   Draw;
-  if (fx.Width <> Width) or (fx.Height <> Height) then
-    fx.SetSize(Width, Height);
-
-  fx.FillTransparent;
-  fx.PutImage(0, 0, FBGRA, dmDrawWithTransparency);
-  BGLCanvas.PutImage(Left, Top, fx.Texture);
+  if FTexture = nil then
+    FTexture := BGLTexture(FBGRA);
+  BGLCanvas.PutImage(Left, Top, FTexture);
+  FTexture := nil;
 end;
 
 procedure TFXMaterialDesignButton.FXPreview(var aCanvas: TCanvas);
@@ -564,7 +562,6 @@ begin
   FTimer.OnStopTimer := @OnStopTimer;
   FBGRA := TBGRABitmap.Create(Width, Height);
   FBGRAShadow := TBGRABitmap.Create(Width, Height);
-  fx := TBGLBitmap.Create;
   FRoundBorders := 5;
   FNormalColor := clWhite;
   FNormalColorEffect := clSilver;
@@ -591,7 +588,6 @@ begin
   FTimer.OnTimer := nil;
   FreeAndNil(FBGRA);
   FreeAndNil(FBGRAShadow);
-  FreeAndNil(fx);
   inherited Destroy;
 end;
 
