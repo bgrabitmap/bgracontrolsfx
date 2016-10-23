@@ -1,19 +1,19 @@
 object frmMain: TfrmMain
-  Left = 37
-  Height = 445
-  Top = 109
-  Width = 783
+  Left = 487
+  Height = 444
+  Top = 194
+  Width = 788
   Caption = 'BGRA Controls FX'
-  ClientHeight = 445
-  ClientWidth = 783
-  OnDestroy = FormDestroy
+  ClientHeight = 444
+  ClientWidth = 788
+  OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '1.7'
   object FXContainer1: TFXContainer
     Left = 0
-    Height = 445
-    Top = 0
-    Width = 783
+    Height = 394
+    Top = 50
+    Width = 788
     Align = alClient
     AutoResizeViewport = True
     Color = clWhite
@@ -42,24 +42,59 @@ object frmMain: TfrmMain
       Caption = 'Third'
       Enabled = False
     end
-    object FXMaterialDesignButton1: TFXMaterialDesignButton
-      Left = 144
-      Height = 272
-      Top = 88
-      Width = 472
-      RoundBorders = 100
-      NormalColor = clSilver
-      NormalColorEffect = clWhite
-      ShadowColor = clSkyBlue
-      ShadowSize = 70
-      TextColor = clWhite
-      TextSize = 30
-      TextShadowSize = 10
-      TextStyle = [fsBold, fsItalic]
+    object FXMaterialDesignButton2: TFXMaterialDesignButton
+      Left = 160
+      Height = 72
+      Top = 152
+      Width = 491
+      ColorKind = mcDefault
+      FontColorAutomatic = True
+      ShadowColor = clBlack
+      TextSize = 40
+      TextShadow = False
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
-      Caption = 'Hello World'
+      Caption = 'FXMaterialDesignButton2'
+    end
+    object FXMaterialDesignButton3: TFXMaterialDesignButton
+      Left = 694
+      Height = 72
+      Top = 312
+      Width = 83
+      RoundBorders = 35
+      ColorKind = mcDefault
+      FontColorAutomatic = True
+      ShadowColor = clBlack
+      TextSize = 40
+      TextShadow = False
+      TextFont = 'default'
+      Anchors = []
+      Caption = 'FX'
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 788
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 50
+    ClientWidth = 788
+    Color = clWhite
+    ParentColor = False
+    TabOrder = 1
+    object ComboBox1: TComboBox
+      Left = 589
+      Height = 28
+      Top = 8
+      Width = 188
+      Anchors = [akTop, akRight]
+      ItemHeight = 20
+      OnChange = ComboBox1Change
+      Style = csDropDownList
+      TabOrder = 0
     end
   end
 end

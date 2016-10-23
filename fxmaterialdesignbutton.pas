@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Types, LResources, Forms, Controls, Graphics, Dialogs,
-  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXContainer, ExtCtrls;
+  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXContainer, ExtCtrls, FXMaterialColors;
 
 type
 
@@ -14,6 +14,8 @@ type
 
   TFXMaterialDesignButton = class(TGraphicControl, IFXDrawable)
   private
+    FColorKind: TMaterialColor;
+    FFontColorAutomatic: boolean;
     FNormalColor: TColor;
     FNormalColorEffect: TColor;
     FRoundBorders: single;
@@ -38,6 +40,8 @@ type
     FCircleAlpha: byte;
     FTexture: IBGLTexture;
     FNeedDraw: boolean;
+    procedure SetFColorKind(AValue: TMaterialColor);
+    procedure SetFFontColorAutomatic(AValue: boolean);
     procedure SetFNormalColor(AValue: TColor);
     procedure SetFNormalColorEffect(AValue: TColor);
     procedure SetFRoundBorders(AValue: single);
@@ -64,7 +68,7 @@ type
     class function GetControlClassDefaultSize: TSize; override;
     procedure TextChanged; override;
     procedure UpdateShadow;
-    procedure DrawTextShadow(AHeight: integer);
+    procedure DrawTextShadow(AHeight: integer; ATextColor: TColor);
   protected
     procedure FXInvalidate;
     procedure FXDraw;
@@ -76,6 +80,9 @@ type
     destructor Destroy; override;
   published
     property RoundBorders: single read FRoundBorders write SetFRoundBorders default 5;
+    property ColorKind: TMaterialColor read FColorKind write SetFColorKind;
+    property FontColorAutomatic: boolean read FFontColorAutomatic
+      write SetFFontColorAutomatic;
     property NormalColor: TColor read FNormalColor write SetFNormalColor default clWhite;
     property NormalColorEffect: TColor read FNormalColorEffect
       write SetFNormalColorEffect default clSilver;
@@ -343,6 +350,25 @@ begin
     FXInvalidate;
 end;
 
+procedure TFXMaterialDesignButton.SetFColorKind(AValue: TMaterialColor);
+begin
+  if FColorKind = AValue then
+    Exit;
+  FColorKind := AValue;
+  FNeedDraw := True;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
+end;
+
+procedure TFXMaterialDesignButton.SetFFontColorAutomatic(AValue: boolean);
+begin
+  if FFontColorAutomatic = AValue then
+    Exit;
+  FFontColorAutomatic := AValue;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
+end;
+
 procedure TFXMaterialDesignButton.SetFNormalColorEffect(AValue: TColor);
 begin
   if FNormalColorEffect = AValue then
@@ -409,13 +435,13 @@ begin
     FBGRAShadow.RoundRectAntialias(FShadowSize, FShadowSize, Width - FShadowSize,
       Height - FShadowSize, FRoundBorders, FRoundBorders,
       FShadowColor, 1, FShadowColor, [rrDefault]);
-    BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize / sqrt(2),
-      FShadowSize / sqrt(2), rbBox) as TBGRABitmap);
+    BGRAReplace(FBGRAShadow, FBGRAShadow.FilterBlurRadial(FShadowSize /
+      sqrt(2), FShadowSize / sqrt(2), rbBox) as TBGRABitmap);
   end;
   FNeedDraw := True;
 end;
 
-procedure TFXMaterialDesignButton.DrawTextShadow(AHeight: integer);
+procedure TFXMaterialDesignButton.DrawTextShadow(AHeight: integer; ATextColor: TColor);
 var
   bmpSdw: TBGRABitmap;
   OutTxtSize: TSize;
@@ -449,7 +475,7 @@ begin
     bmpSdw.Free;
   end;
 
-  FBGRA.TextOut(OutX, OutY, Caption, FTextColor);
+  FBGRA.TextOut(OutX, OutY, Caption, ATextColor);
 end;
 
 procedure TFXMaterialDesignButton.FXInvalidate;
@@ -490,6 +516,8 @@ var
   round_rect_width: integer;
   round_rect_height: integer;
   text_height: integer;
+  color_normal: TColor;
+  color_effect: TColor;
 begin
   if (Width - 1 > FRoundBorders * 2) and (Height - 1 > FRoundBorders * 2) then
   begin
@@ -506,10 +534,21 @@ begin
       if FShadow then
         FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
 
-      temp := TBGRABitmap.Create(Width, Height, FNormalColor);
+      if ColorKind = mcDefault then
+      begin
+        color_normal := FNormalColor;
+        color_effect := FNormalColorEffect;
+      end
+      else
+      begin
+        color_normal := MaterialColorsList.KeyData[MaterialColorStr[ColorKind]].M500;
+        color_effect := MaterialColorsList.KeyData[MaterialColorStr[ColorKind]].M50;
+      end;
+
+      temp := TBGRABitmap.Create(Width, Height, color_normal);
       temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
-        ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
-        ColorToBGRA(FNormalColorEffect, FCircleAlpha));
+        ColorToBGRA(color_effect, FCircleAlpha), 1,
+        ColorToBGRA(color_effect, FCircleAlpha));
 
       if FShadow then
       begin
@@ -536,7 +575,10 @@ begin
           text_height := Height - FShadowSize
         else
           text_height := Height;
-        DrawTextShadow(text_height);
+        if FontColorAutomatic then
+          DrawTextShadow(text_height, GetContrastColor(color_normal))
+        else
+          DrawTextShadow(text_height, FTextColor);
       end;
 
       FNeedDraw := False;
@@ -544,7 +586,10 @@ begin
     end;
   end
   else
+  begin
     FBGRA.FillTransparent;
+    FTexture := nil;
+  end;
 end;
 
 procedure TFXMaterialDesignButton.Paint;
@@ -584,6 +629,7 @@ begin
   FTextStyle := [];
   FTextFont := 'default';
   FTextQuality := fqFineAntialiasing;
+  FFontColorAutomatic := True;
 end;
 
 destructor TFXMaterialDesignButton.Destroy;
