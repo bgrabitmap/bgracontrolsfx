@@ -159,6 +159,8 @@ begin
   end
   else
     FCompStyle := csNonLCL;
+
+  Align := alClient;
 end;
 
 destructor TCustomFXContainer.Destroy;
