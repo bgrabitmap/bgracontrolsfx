@@ -153,7 +153,7 @@ end;
 procedure TCustomFXButton.FXInvalidate;
 begin
   if (csDesigning in ComponentState) then
-    Parent.Invalidate;
+    Invalidate;
 
   if Parent is TFXContainer then
   begin
