@@ -63,6 +63,7 @@ type
     class function GetControlClassDefaultSize: TSize; override;
     procedure TextChanged; override;
     procedure UpdateShadow;
+    procedure DrawTextShadow(AHeight: integer);
   protected
     procedure FXInvalidate;
     procedure FXDraw;
@@ -134,42 +135,6 @@ type
 procedure Register;
 
 implementation
-
-procedure DrawTextShadow(bmpOut: TBGRABitmap; AWidth, AHeight: integer;
-  AText: string; AFontHeight: integer; ATextColor, AShadowColor: TBGRAPixel;
-  AOffSetX, AOffSetY: integer; ARadius: integer = 0; AFontStyle: TFontStyles = [];
-  AFontName: string = 'Default'; AFontQuality: TBGRAFontQuality = fqFineAntialiasing);
-var
-  bmpSdw: TBGRABitmap;
-  OutTxtSize: TSize;
-  OutX, OutY: integer;
-begin
-  bmpOut.FontAntialias := True;
-  bmpOut.FontHeight := AFontHeight;
-  bmpOut.FontStyle := AFontStyle;
-  bmpOut.FontName := AFontName;
-  bmpOut.FontQuality := AFontQuality;
-
-  OutTxtSize := bmpOut.TextSize(AText);
-  OutX := Round(AWidth / 2) - Round(OutTxtSize.cx / 2);
-  OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
-
-  bmpSdw := TBGRABitmap.Create(OutTxtSize.cx + 2 * ARadius, OutTxtSize.cy +
-    2 * ARadius);
-  bmpSdw.FontAntialias := True;
-  bmpSdw.FontHeight := AFontHeight;
-  bmpSdw.FontStyle := AFontStyle;
-  bmpSdw.FontName := AFontName;
-  bmpSdw.FontQuality := AFontQuality;
-
-  bmpSdw.TextOut(ARadius, ARadius, AText, AShadowColor);
-  BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(ARadius, rbFast));
-  bmpOut.PutImage(OutX + AOffSetX - ARadius, OutY + AOffSetY - ARadius, bmpSdw,
-    dmDrawWithTransparency);
-  bmpSdw.Free;
-
-  bmpOut.TextOut(OutX, OutY, AText, ATextColor);
-end;
 
 procedure Register;
 begin
@@ -434,6 +399,40 @@ begin
   end;
 end;
 
+procedure TFXMaterialDesignButton.DrawTextShadow(AHeight: integer);
+var
+  bmpSdw: TBGRABitmap;
+  OutTxtSize: TSize;
+  OutX, OutY: integer;
+begin
+  FBGRA.FontAntialias := True;
+  FBGRA.FontHeight := TextSize;
+  FBGRA.FontStyle := TextStyle;
+  FBGRA.FontName := TextFont;
+  FBGRA.FontQuality := TextQuality;
+
+  OutTxtSize := FBGRA.TextSize(Caption);
+  OutX := Round(FBGRA.Width / 2) - Round(OutTxtSize.cx / 2);
+  OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
+
+  bmpSdw := TBGRABitmap.Create(OutTxtSize.cx + 2 * FTextShadowSize,
+    OutTxtSize.cy + 2 * FTextShadowSize);
+  bmpSdw.FontAntialias := True;
+  bmpSdw.FontHeight := TextSize;
+  bmpSdw.FontStyle := TextStyle;
+  bmpSdw.FontName := TextFont;
+  bmpSdw.FontQuality := TextQuality;
+
+  bmpSdw.TextOut(FTextShadowSize, FTextShadowSize, Caption, FTextShadowColor);
+  BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize, rbFast));
+  FBGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
+    FTextShadowOffSetY - FTextShadowSize, bmpSdw,
+    dmDrawWithTransparency);
+  bmpSdw.Free;
+
+  FBGRA.TextOut(OutX, OutY, Caption, FTextColor);
+end;
+
 procedure TFXMaterialDesignButton.FXInvalidate;
 begin
   if (csDesigning in ComponentState) then
@@ -471,7 +470,7 @@ var
   round_rect_height: integer;
   text_height: integer;
 begin
-  if (Width-1 > FRoundBorders * 2) and (Height-1 > FRoundBorders * 2) then
+  if (Width - 1 > FRoundBorders * 2) and (Height - 1 > FRoundBorders * 2) then
   begin
     if (FBGRA.Width <> Width) or (FBGRA.Height <> Height) then
     begin
@@ -514,9 +513,7 @@ begin
         text_height := Height - FShadowSize
       else
         text_height := Height;
-      DrawTextShadow(FBGRA, Width, text_height, Caption, FTextSize,
-        FTextColor, FTextShadowColor, FTextShadowOffsetX, FTextShadowOffsetY,
-        FTextShadowSize, FTextStyle, FTextFont, FTextQuality);
+      DrawTextShadow(text_height);
     end;
   end;
 end;
