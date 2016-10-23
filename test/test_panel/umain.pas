@@ -37,7 +37,7 @@ implementation
 { TfrmMain }
 procedure TfrmMain.FXButton1Click(Sender: TObject);
 begin
-  ShowMessage('Hello World!');
+  FXButton1.Caption := 'Hi.';
 end;
 
 procedure TfrmMain.FXButton2Click(Sender: TObject);
