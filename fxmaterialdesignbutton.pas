@@ -365,6 +365,7 @@ begin
   if FFontColorAutomatic = AValue then
     Exit;
   FFontColorAutomatic := AValue;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
@@ -374,6 +375,7 @@ begin
   if FNormalColorEffect = AValue then
     Exit;
   FNormalColorEffect := AValue;
+  FNeedDraw := True;
   if not (csLoading in ComponentState) then
     FXInvalidate;
 end;
