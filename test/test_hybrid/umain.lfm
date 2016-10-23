@@ -1,0 +1,43 @@
+object frmMain: TfrmMain
+  Left = 543
+  Height = 308
+  Top = 151
+  Width = 457
+  Caption = 'BGRA Controls FX'
+  ClientHeight = 308
+  ClientWidth = 457
+  LCLVersion = '1.7'
+  object FXContainer1: TFXContainer
+    Left = 0
+    Height = 308
+    Top = 0
+    Width = 227
+    Align = alLeft
+    AutoResizeViewport = True
+    Color = clWhite
+    object FXMaterialDesignButton1: TFXMaterialDesignButton
+      Left = 8
+      Height = 42
+      Top = 8
+      Width = 216
+      TextFont = 'default'
+      AutoSize = True
+      Caption = 'FXMaterialDesignButton1'
+    end
+  end
+  object FXMaterialDesignButton2: TFXMaterialDesignButton
+    Left = 232
+    Height = 42
+    Top = 8
+    Width = 216
+    TextFont = 'default'
+    AutoSize = True
+    Caption = 'FXMaterialDesignButton2'
+  end
+  object Splitter1: TSplitter
+    Left = 227
+    Height = 308
+    Top = 0
+    Width = 5
+  end
+end

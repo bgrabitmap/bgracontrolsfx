@@ -13,6 +13,9 @@
         <DpiAware Value="True"/>
       </XPManifest>
     </General>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
     </BuildModes>
@@ -34,14 +37,13 @@
     </RequiredPackages>
     <Units Count="2">
       <Unit0>
-        <Filename Value="test_multi_containers.lpr"/>
+        <Filename Value="test_hybrid.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="umain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMain"/>
-        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit1>
     </Units>
@@ -50,7 +52,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="test_multi_containers"/>
+      <Filename Value="test_hybrid"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

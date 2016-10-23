@@ -1,4 +1,4 @@
-program test_multi_containers;
+program test_hybrid;
 
 {$mode objfpc}{$H+}
 
