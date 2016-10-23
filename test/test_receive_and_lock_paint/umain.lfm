@@ -6,7 +6,6 @@ object frmMain: TfrmMain
   Caption = 'BGRA Controls FX'
   ClientHeight = 531
   ClientWidth = 347
-  OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '1.7'
   object FXContainer1: TFXContainer
@@ -119,8 +118,7 @@ object frmMain: TfrmMain
     end
   end
   object Timer1: TTimer
-    Enabled = False
-    Interval = 30
+    Interval = 20
     OnTimer = Timer1Timer
     OnStartTimer = Timer1StartTimer
     left = 383

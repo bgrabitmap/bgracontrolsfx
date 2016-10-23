@@ -23,7 +23,6 @@ type
     FXMaterialDesignButton7: TFXMaterialDesignButton;
     FXMaterialDesignButton8: TFXMaterialDesignButton;
     Timer1: TTimer;
-    procedure FormCreate(Sender: TObject);
     procedure Timer1StartTimer(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
@@ -43,11 +42,8 @@ implementation
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 begin
-  { This is the only way to call DoOnPaint when using these settings.
-  Note that is responsibility of the controls to follow this rule, is not related with any code in the container.
-  This helps having a constant FPS and speed of drawing when controls has animations.
-  By the way, is not neccessary at all, since the MaterialDesignButton has that working already }
-  FXContainer1.DoOnPaint;
+  { Will be invalidated only by this timer at the interval specified }
+  FXContainer1.Invalidate;
 end;
 
 procedure TfrmMain.Timer1StartTimer(Sender: TObject);
@@ -56,12 +52,6 @@ begin
   FXContainer1.ReceivePaintFrom := Timer1;
   { Lock changing the ReceivePaintFrom control }
   FXContainer1.LockReceivePaint := true;
-end;
-
-procedure TfrmMain.FormCreate(Sender: TObject);
-begin
-  { Enable this to see it working, the window will refresh at the interval of timer only }
-  // Timer1.Enabled := True;
 end;
 
 end.

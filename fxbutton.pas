@@ -153,12 +153,12 @@ end;
 procedure TCustomFXButton.FXInvalidate;
 begin
   if (csDesigning in ComponentState) then
-    Invalidate;
+    Parent.Invalidate;
 
   if Parent is TFXContainer then
   begin
     if TFXContainer(Parent).ReceivePaintFrom = nil then
-      TFXContainer(Parent).DoOnPaint;
+      Parent.Invalidate;
   end;
 end;
 
@@ -171,7 +171,6 @@ begin
   if (FTexture = nil) then
     FTexture := BGLTexture(FBGRA);
   BGLCanvas.PutImage(Left, Top, FTexture);
-  FTexture := nil;
 end;
 
 procedure TCustomFXButton.FXPreview(var aCanvas: TCanvas);
@@ -227,6 +226,7 @@ begin
     FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
 
     FNeedDraw := False;
+    FTexture := nil;
   end;
 end;
 

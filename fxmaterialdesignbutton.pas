@@ -59,7 +59,6 @@ type
     {%H-}WithThemeSpace: boolean); override;
     procedure OnStartTimer({%H-}Sender: TObject);
     procedure OnTimer({%H-}Sender: TObject);
-    procedure OnStopTimer({%H-}Sender: TObject);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
       X, Y: integer); override;
     class function GetControlClassDefaultSize: TSize; override;
@@ -356,7 +355,6 @@ procedure TFXMaterialDesignButton.OnStartTimer(Sender: TObject);
 begin
   FCircleAlpha := 255;
   FCircleSize := 0;
-  TFXContainer(Parent).ReceivePaintFrom := Self;
 end;
 
 procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
@@ -456,14 +454,12 @@ end;
 procedure TFXMaterialDesignButton.FXInvalidate;
 begin
   if (csDesigning in ComponentState) then
-    Invalidate;
+    Parent.Invalidate;
 
   if Parent is TFXContainer then
   begin
-    if (FTimer.Enabled) and (TFXContainer(Parent).ReceivePaintFrom = Self) then
-      TFXContainer(Parent).DoOnPaint
-    else if TFXContainer(Parent).ReceivePaintFrom = nil then
-      TFXContainer(Parent).DoOnPaint;
+    if TFXContainer(Parent).ReceivePaintFrom = nil then
+      Parent.Invalidate;
   end;
 end;
 
@@ -476,7 +472,6 @@ begin
   if FTexture = nil then
     FTexture := BGLTexture(FBGRA);
   BGLCanvas.PutImage(Left, Top, FTexture);
-  FTexture := nil;
 end;
 
 procedure TFXMaterialDesignButton.FXPreview(var aCanvas: TCanvas);
@@ -542,6 +537,7 @@ begin
       end;
 
       FNeedDraw := False;
+      FTexture := nil;
     end;
   end
   else
@@ -559,7 +555,6 @@ begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := @OnStartTimer;
   FTimer.OnTimer := @OnTimer;
-  FTimer.OnStopTimer := @OnStopTimer;
   FBGRA := TBGRABitmap.Create(Width, Height);
   FBGRAShadow := TBGRABitmap.Create(Width, Height);
   FRoundBorders := 5;
@@ -589,12 +584,6 @@ begin
   FreeAndNil(FBGRA);
   FreeAndNil(FBGRAShadow);
   inherited Destroy;
-end;
-
-procedure TFXMaterialDesignButton.OnStopTimer(Sender: TObject);
-begin
-  if TFXContainer(Parent).ReceivePaintFrom = Self then
-    TFXContainer(Parent).ReceivePaintFrom := nil;
 end;
 
 end.
