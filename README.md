@@ -5,4 +5,4 @@ OpenGL Controls for Lazarus.
 Under Windows just open the package, click on install and rebuild the IDE. Under Linux you need to install first freeglut3-dev in the system.
 
 # Usage
-Drop a TFXContainer in a form, then put any other FX control in top of that. Don't add the controls in the form directly.
+Drop a TFXContainer in a form, then put any other FX control in top of that.
