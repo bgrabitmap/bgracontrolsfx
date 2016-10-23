@@ -382,7 +382,7 @@ end;
 procedure TFXMaterialDesignButton.OnStartTimer(Sender: TObject);
 begin
   FCircleAlpha := 255;
-  FCircleSize := 5;
+  FCircleSize := 0;
 end;
 
 procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
