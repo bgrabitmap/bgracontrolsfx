@@ -235,6 +235,8 @@ end;
 
 procedure TCustomFXButton.Paint;
 begin
+  if (Parent is TFXContainer) then
+    exit;
   Draw;
   FBGRA.Draw(Canvas, 0, 0, False);
 end;
