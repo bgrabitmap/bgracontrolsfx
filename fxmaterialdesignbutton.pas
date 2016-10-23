@@ -139,17 +139,15 @@ begin
   Destination := Temp as TBGLBitmap;
 end;
 
-function DrawTextShadow(AWidth, AHeight: integer; AText: string;
-  AFontHeight: integer; ATextColor, AShadowColor: TBGRAPixel;
+procedure DrawTextShadow(bmpOut: TBGLBitmap; AWidth, AHeight: integer;
+  AText: string; AFontHeight: integer; ATextColor, AShadowColor: TBGRAPixel;
   AOffSetX, AOffSetY: integer; ARadius: integer = 0; AFontStyle: TFontStyles = [];
-  AFontName: string = 'Default'; AShowShadow: boolean = True;
-  AFontQuality: TBGRAFontQuality = fqFineAntialiasing): TBGRACustomBitmap;
+  AFontName: string = 'Default'; AFontQuality: TBGRAFontQuality = fqFineAntialiasing);
 var
-  bmpOut, bmpSdw: TBGLBitmap;
+  bmpSdw: TBGLBitmap;
   OutTxtSize: TSize;
   OutX, OutY: integer;
 begin
-  bmpOut := TBGLBitmap.Create(AWidth, AHeight);
   bmpOut.FontAntialias := True;
   bmpOut.FontHeight := AFontHeight;
   bmpOut.FontStyle := AFontStyle;
@@ -160,26 +158,21 @@ begin
   OutX := Round(AWidth / 2) - Round(OutTxtSize.cx / 2);
   OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
 
-  if AShowShadow then
-  begin
-    bmpSdw := TBGLBitmap.Create(OutTxtSize.cx + 2 * ARadius,
-      OutTxtSize.cy + 2 * ARadius);
-    bmpSdw.FontAntialias := True;
-    bmpSdw.FontHeight := AFontHeight;
-    bmpSdw.FontStyle := AFontStyle;
-    bmpSdw.FontName := AFontName;
-    bmpSdw.FontQuality := AFontQuality;
+  bmpSdw := TBGLBitmap.Create(OutTxtSize.cx + 2 * ARadius, OutTxtSize.cy +
+    2 * ARadius);
+  bmpSdw.FontAntialias := True;
+  bmpSdw.FontHeight := AFontHeight;
+  bmpSdw.FontStyle := AFontStyle;
+  bmpSdw.FontName := AFontName;
+  bmpSdw.FontQuality := AFontQuality;
 
-    bmpSdw.TextOut(ARadius, ARadius, AText, AShadowColor);
-    BGLReplace(bmpSdw, bmpSdw.FilterBlurRadial(ARadius, rbFast));
-    bmpOut.PutImage(OutX + AOffSetX - ARadius, OutY + AOffSetY - ARadius, bmpSdw,
-      dmDrawWithTransparency);
-    bmpSdw.Free;
-  end;
+  bmpSdw.TextOut(ARadius, ARadius, AText, AShadowColor);
+  BGLReplace(bmpSdw, bmpSdw.FilterBlurRadial(ARadius, rbFast));
+  bmpOut.PutImage(OutX + AOffSetX - ARadius, OutY + AOffSetY - ARadius, bmpSdw,
+    dmDrawWithTransparency);
+  bmpSdw.Free;
 
   bmpOut.TextOut(OutX, OutY, AText, ATextColor);
-
-  Result := bmpOut;
 end;
 
 procedure Register;
@@ -394,7 +387,11 @@ end;
 
 procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
 begin
-  FCircleSize := FCircleSize + 8;
+  if Width > Height then
+    FCircleSize := FCircleSize + (Width div 15)
+  else
+    FCircleSize := FCircleSize + (Height div 15);
+
   if FCircleAlpha - 10 > 0 then
     FCircleAlpha := FCircleAlpha - 10
   else
@@ -461,51 +458,53 @@ var
   round_rect_height: integer;
   text_height: integer;
 begin
-  if (FBGRA.Width <> Width) or (FBGRA.Height <> Height) then
+  if (Width-1 > FRoundBorders * 2) and (Height-1 > FRoundBorders * 2) then
   begin
-    FBGRA.SetSize(Width, Height);
-    FBGRAShadow.SetSize(Width, Height);
-    UpdateShadow;
-  end;
+    if (FBGRA.Width <> Width) or (FBGRA.Height <> Height) then
+    begin
+      FBGRA.SetSize(Width, Height);
+      FBGRAShadow.SetSize(Width, Height);
+      UpdateShadow;
+    end;
 
-  FBGRA.FillTransparent;
-  if FShadow then
-    FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
-
-  temp := TBGLBitmap.Create(Width, Height, FNormalColor);
-  temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
-    ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
-    ColorToBGRA(FNormalColorEffect, FCircleAlpha));
-
-  if FShadow then
-  begin
-    round_rect_left := FShadowSize;
-    round_rect_width := Width - FShadowSize;
-    round_rect_height := Height - FShadowSize;
-  end
-  else
-  begin
-    round_rect_left := 0;
-    round_rect_width := Width;
-    round_rect_height := Height;
-  end;
-
-  FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width, round_rect_height,
-    FRoundBorders, FRoundBorders, temp, [rrDefault], False);
-
-  temp.Free;
-
-  if Caption <> '' then
-  begin
+    FBGRA.FillTransparent;
     if FShadow then
-      text_height := Height - FShadowSize
+      FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
+
+    temp := TBGLBitmap.Create(Width, Height, FNormalColor);
+    temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
+      ColorToBGRA(FNormalColorEffect, FCircleAlpha), 1,
+      ColorToBGRA(FNormalColorEffect, FCircleAlpha));
+
+    if FShadow then
+    begin
+      round_rect_left := FShadowSize;
+      round_rect_width := Width - FShadowSize;
+      round_rect_height := Height - FShadowSize;
+    end
     else
-      text_height := Height;
-    temp := DrawTextShadow(Width, text_height, Caption, FTextSize,
-      FTextColor, FTextShadowColor, FTextShadowOffsetX, FTextShadowOffsetY,
-      FTextShadowSize, FTextStyle, FTextFont, FTextShadow, FTextQuality) as TBGLBitmap;
-    FBGRA.PutImage(0, 0, temp, dmDrawWithTransparency);
+    begin
+      round_rect_left := 0;
+      round_rect_width := Width;
+      round_rect_height := Height;
+    end;
+
+
+    FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width, round_rect_height,
+      FRoundBorders, FRoundBorders, temp, [rrDefault], False);
+
     temp.Free;
+
+    if Caption <> '' then
+    begin
+      if FShadow then
+        text_height := Height - FShadowSize
+      else
+        text_height := Height;
+      DrawTextShadow(FBGRA, Width, text_height, Caption, FTextSize,
+        FTextColor, FTextShadowColor, FTextShadowOffsetX, FTextShadowOffsetY,
+        FTextShadowSize, FTextStyle, FTextFont, FTextQuality);
+    end;
   end;
 end;
 

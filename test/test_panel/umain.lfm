@@ -49,6 +49,7 @@ object frmMain: TfrmMain
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
       Caption = 'Material Design'
+      OnMouseDown = FXMaterialDesignButton1MouseDown
     end
   end
 end

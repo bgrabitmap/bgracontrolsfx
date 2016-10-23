@@ -23,6 +23,8 @@ type
     procedure FXButton1Click(Sender: TObject);
     procedure FXButton2Click(Sender: TObject);
     procedure FXContainer1Paint(Sender: TObject);
+    procedure FXMaterialDesignButton1MouseDown(Sender: TObject;
+      Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
     bg: TBGLBitmap;
   end;
@@ -64,6 +66,16 @@ begin
   end;
 
   BGLCanvas.PutImage(0, 0, bg.Texture);
+end;
+
+procedure TfrmMain.FXMaterialDesignButton1MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  e: extended;
+begin
+  e := random;
+  FXMaterialDesignButton1.Caption := FloatToStr(Random);
+  FXMaterialDesignButton1.TextSize := round(random * 30);
 end;
 
 end.
