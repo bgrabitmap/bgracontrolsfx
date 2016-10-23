@@ -468,7 +468,8 @@ begin
     bmpSdw.FontQuality := TextQuality;
 
     bmpSdw.TextOut(FTextShadowSize, FTextShadowSize, Caption, FTextShadowColor);
-    BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize, rbFast));
+    BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize /
+      sqrt(2), FTextShadowSize / sqrt(2), rbBox));
     FBGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
       FTextShadowOffSetY - FTextShadowSize, bmpSdw,
       dmDrawWithTransparency);

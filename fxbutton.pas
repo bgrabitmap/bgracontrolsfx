@@ -175,9 +175,21 @@ end;
 
 procedure TCustomFXButton.CalculatePreferredSize(
   var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
+var
+  ts: TSize;
 begin
-  PreferredWidth := 150;
-  PreferredHeight := 50;
+  inherited CalculatePreferredSize(PreferredWidth, PreferredHeight,
+    WithThemeSpace);
+
+  if Caption <> '' then
+  begin
+    FBGRA.FontHeight := Font.GetTextHeight(Caption);
+    FBGRA.FontAntialias := True;
+
+    ts := FBGRA.TextSize(Caption);
+    Inc(PreferredWidth, ts.cx + 26);
+    Inc(PreferredHeight, ts.cy + 10);
+  end;
 end;
 
 class function TCustomFXButton.GetControlClassDefaultSize: TSize;
@@ -361,6 +373,7 @@ begin
   FColorActive := clMedGray;
   FColorDisabled := clGray;
   FFontColorAutomatic := True;
+  AutoSize := True;
 end;
 
 destructor TCustomFXButton.Destroy;
