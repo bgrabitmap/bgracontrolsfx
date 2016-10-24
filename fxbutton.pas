@@ -44,6 +44,7 @@ type
     procedure MouseEnter; override;
     procedure MouseLeave; override;
   protected
+    procedure SetEnabled(Value: Boolean); override;
     procedure Draw; override;
     function GetFillColor: TColor;
   public
@@ -423,6 +424,14 @@ begin
   FNeedDraw := True;
   FXInvalidate;
   inherited MouseLeave;
+end;
+
+procedure TCustomFXButton.SetEnabled(Value: Boolean);
+begin
+  inherited SetEnabled(Value);
+  FNeedDraw := True;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
 end;
 
 procedure TCustomFXButton.Draw;
