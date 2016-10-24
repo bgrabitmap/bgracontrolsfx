@@ -120,7 +120,6 @@ type
     property BorderSpacing;
     property Caption;
     property ColorKind;
-    property FontColorAutomatic;
     property Constraints;
     property DragCursor;
     property DragKind;
