@@ -513,7 +513,6 @@ begin
   FColorActive := clMedGray;
   FColorDisabled := clGray;
   FFontColorAutomatic := True;
-  AutoSize := True;
 end;
 
 destructor TCustomFXButton.Destroy;
