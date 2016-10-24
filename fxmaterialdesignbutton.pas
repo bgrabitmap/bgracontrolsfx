@@ -402,9 +402,12 @@ end;
 procedure TFXMaterialDesignButton.MouseDown(Button: TMouseButton;
   Shift: TShiftState; X, Y: integer);
 begin
-  FTimer.Enabled := False;
-  FMousePos := Point(X, Y);
-  FTimer.Enabled := True;
+  if Button = mbLeft then
+  begin
+    FTimer.Enabled := False;
+    FMousePos := Point(X, Y);
+    FTimer.Enabled := True;
+  end;
   inherited MouseDown(Button, Shift, X, Y);
 end;
 

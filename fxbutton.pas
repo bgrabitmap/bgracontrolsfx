@@ -395,18 +395,24 @@ end;
 procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
-  FState := FState + [fxbActive];
-  FNeedDraw := True;
-  FXInvalidate;
+  if Button = mbLeft then
+  begin
+    FState := FState + [fxbActive];
+    FNeedDraw := True;
+    FXInvalidate;
+  end;
   inherited MouseDown(Button, Shift, X, Y);
 end;
 
 procedure TCustomFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: integer);
 begin
-  FState := FState - [fxbActive];
-  FNeedDraw := True;
-  FXInvalidate;
+  if Button = mbLeft then
+  begin
+    FState := FState - [fxbActive];
+    FNeedDraw := True;
+    FXInvalidate;
+  end;
   inherited MouseUp(Button, Shift, X, Y);
 end;
 
