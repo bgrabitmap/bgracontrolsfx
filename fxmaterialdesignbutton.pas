@@ -489,12 +489,12 @@ var
   color_normal: TColor;
   color_effect: TColor;
 begin
-  if (Width - 1 > FRoundBorders * 2) and (Height - 1 > FRoundBorders * 2) then
+  if (ClientWidth - 1 > FRoundBorders * 2) and (ClientHeight - 1 > FRoundBorders * 2) then
   begin
-    if (FXLayers[1].BGRA.Width <> Width) or (FXLayers[1].BGRA.Height <> Height) then
+    if (FXLayers[1].BGRA.Width <> ClientWidth) or (FXLayers[1].BGRA.Height <> ClientHeight) then
     begin
-      FXLayers[1].BGRA.SetSize(Width, Height);
-      FXLayers[0].BGRA.SetSize(Width, Height);
+      FXLayers[1].BGRA.SetSize(ClientWidth, ClientHeight);
+      FXLayers[0].BGRA.SetSize(ClientWidth, ClientHeight);
       UpdateShadow;
     end;
 
@@ -513,7 +513,7 @@ begin
         color_effect := MaterialColorsList.KeyData[MaterialColorStr[ColorKind]].M50;
       end;
 
-      temp := TBGRABitmap.Create(Width, Height, color_normal);
+      temp := TBGRABitmap.Create(ClientWidth, ClientHeight, color_normal);
       temp.EllipseAntialias(FMousePos.X, FMousePos.Y, FCircleSize, FCircleSize,
         ColorToBGRA(color_effect, FCircleAlpha), 1,
         ColorToBGRA(color_effect, FCircleAlpha));
@@ -521,14 +521,14 @@ begin
       if FShadow then
       begin
         round_rect_left := FShadowSize;
-        round_rect_width := Width - FShadowSize;
-        round_rect_height := Height - FShadowSize;
+        round_rect_width := ClientWidth - FShadowSize;
+        round_rect_height := ClientHeight - FShadowSize;
       end
       else
       begin
         round_rect_left := 0;
-        round_rect_width := Width;
-        round_rect_height := Height;
+        round_rect_width := ClientWidth;
+        round_rect_height := ClientHeight;
       end;
 
       FXLayers[1].BGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width,
@@ -540,9 +540,9 @@ begin
       if Caption <> '' then
       begin
         if FShadow then
-          text_height := Height - FShadowSize
+          text_height := ClientHeight - FShadowSize
         else
-          text_height := Height;
+          text_height := ClientHeight;
         if FontColorAutomatic then
           DrawTextShadow(text_height, GetContrastColor(color_normal))
         else
