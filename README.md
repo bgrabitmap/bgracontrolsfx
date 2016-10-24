@@ -7,6 +7,9 @@ Under Windows just open the package, click on install and rebuild the IDE. Under
 ### Usage
 Drop a TFXContainer in a form, then put any other FX control in top of that.
 
+### Authors
+BGRA Controls FX is made by Lainz and Circular.
+
 # TFXButton
 A button control with colors for normal, hover, active and disabled state. It contains ColorKind, a property to select fast any combination of Material Design colors.
 
