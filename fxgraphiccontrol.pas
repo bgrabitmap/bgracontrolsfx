@@ -183,7 +183,7 @@ begin
     pdest^.red := GammaCompressionTab[((GammaExpansionTab[psource^.red]*ec.red+65535) shr 16)];
     pdest^.green := GammaCompressionTab[((GammaExpansionTab[psource^.green]*ec.green+65535) shr 16)];
     pdest^.blue := GammaCompressionTab[((GammaExpansionTab[psource^.blue]*ec.blue+65535) shr 16)];
-    pdest^.alpha := (pdest^.alpha*ec.alpha+255) shr 16;
+    pdest^.alpha := psource^.alpha; //(pdest^.alpha*ec.alpha+255) shr 16;
     inc(pdest);
     inc(psource);
   end;

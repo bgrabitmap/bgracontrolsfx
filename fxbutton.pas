@@ -226,7 +226,6 @@ end;
 procedure TFXCustomNativeButton.Draw;
 var
   style: TTextStyle;
-  fill_color: TColor;
   Details: TThemedElementDetails;
   PaintRect: TRect;
   AlphaRect: Pointer;
@@ -240,11 +239,9 @@ begin
   if FNeedDraw then
   begin
     FXLayers[0].BGRA.FillTransparent;
-    if mcDefault = ColorKind then
-    begin
-      {$IFDEF LINUX}
-        FXLayers[0].BGRA.Fill(ColorToBGRA(ColorToRGB(Parent.Color)));
-      {$ENDIF}
+    {$IFDEF LINUX}
+      FXLayers[0].BGRA.Fill(ColorToBGRA(ColorToRGB(Parent.Color)));
+    {$ENDIF}
       PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
 
       if Enabled then
@@ -272,23 +269,12 @@ begin
       ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
         DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
       RestoreAlphaRectAndFree(FXLayers[0].BGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
-    end
-    else
-    begin
-      style.Alignment := taCenter;
-      style.Layout := tlCenter;
-      FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
-      FXLayers[0].BGRA.FontAntialias := True;
 
-      fill_color := GetFillColor;
-      FXLayers[0].BGRA.Fill(fill_color);
-
-      if FontColorAutomatic then
-        FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height), 0, 0, Caption, style,
-          GetContrastColor(fill_color))
+      if ColorKind = mcDefault then
+        FXLayers[0].Color := BGRAWhite
       else
-        FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height), 0, 0, Caption, style, Font.Color);
-    end;
+        FXLayers[0].Color := GetFillColor;
+
     FNeedDraw := False;
     FXLayers[0].Texture := nil;
   end;
