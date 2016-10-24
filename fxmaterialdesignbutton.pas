@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, Types, LResources, Forms, Controls, Graphics, Dialogs,
-  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXContainer, ExtCtrls, FXMaterialColors;
+  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXContainer, ExtCtrls, FXMaterialColors,
+  FXGraphicControl;
 
 type
 
   { TFXMaterialDesignButton }
 
-  TFXMaterialDesignButton = class(TGraphicControl, IFXDrawable)
+  TFXMaterialDesignButton = class(TFXGraphicControl)
   private
     FColorKind: TMaterialColor;
     FFontColorAutomatic: boolean;
@@ -33,12 +34,10 @@ type
     FTextSize: integer;
     FTextStyle: TFontStyles;
     FTimer: TTimer;
-    FBGRA: TBGRABitmap;
     FBGRAShadow: TBGRABitmap;
     FMousePos: TPoint;
     FCircleSize: single;
     FCircleAlpha: byte;
-    FTexture: IBGLTexture;
     FNeedDraw: boolean;
     procedure SetFColorKind(AValue: TMaterialColor);
     procedure SetFFontColorAutomatic(AValue: boolean);
@@ -70,11 +69,7 @@ type
     procedure UpdateShadow;
     procedure DrawTextShadow(AHeight: integer; ATextColor: TColor);
   protected
-    procedure FXInvalidate;
-    procedure FXDraw;
-    procedure FXPreview(var aCanvas: TCanvas);
-    procedure Draw;
-    procedure Paint; override;
+    procedure Draw; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -481,37 +476,6 @@ begin
   FBGRA.TextOut(OutX, OutY, Caption, ATextColor);
 end;
 
-procedure TFXMaterialDesignButton.FXInvalidate;
-begin
-  if (csDesigning in ComponentState) then
-    Invalidate;
-
-  if Parent is TFXContainer then
-  begin
-    if TFXContainer(Parent).ReceivePaintFrom = nil then
-      Parent.Invalidate;
-  end
-  else
-    Invalidate;
-end;
-
-procedure TFXMaterialDesignButton.FXDraw;
-begin
-  if (csDesigning in ComponentState) then
-    exit;
-
-  Draw;
-  if FTexture = nil then
-    FTexture := BGLTexture(FBGRA);
-  BGLCanvas.PutImage(Left, Top, FTexture);
-end;
-
-procedure TFXMaterialDesignButton.FXPreview(var aCanvas: TCanvas);
-begin
-  Draw;
-  FBGRA.Draw(aCanvas, Left, Top, False);
-end;
-
 procedure TFXMaterialDesignButton.Draw;
 var
   temp: TBGRABitmap;
@@ -595,14 +559,6 @@ begin
   end;
 end;
 
-procedure TFXMaterialDesignButton.Paint;
-begin
-  if (Parent is TFXContainer) then
-    exit;
-  Draw;
-  FBGRA.Draw(Canvas, 0, 0, False);
-end;
-
 constructor TFXMaterialDesignButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -614,8 +570,7 @@ begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := @OnStartTimer;
   FTimer.OnTimer := @OnTimer;
-  FBGRA := TBGRABitmap.Create(Width, Height);
-  FBGRAShadow := TBGRABitmap.Create(Width, Height);
+  FBGRAShadow := TBGRABitmap.Create;
   FRoundBorders := 5;
   FNormalColor := clWhite;
   FNormalColorEffect := clSilver;
@@ -641,7 +596,6 @@ begin
   FTimer.OnStartTimer := nil;
   FTimer.OnStopTimer := nil;
   FTimer.OnTimer := nil;
-  FreeAndNil(FBGRA);
   FreeAndNil(FBGRAShadow);
   inherited Destroy;
 end;

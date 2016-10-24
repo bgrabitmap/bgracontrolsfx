@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Types,
-  FXContainer, BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXMaterialColors;
+  FXContainer, BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXMaterialColors,
+  FXGraphicControl;
 
 type
 
@@ -15,16 +16,14 @@ type
 
   { TCustomFXButton }
 
-  TCustomFXButton = class(TGraphicControl, IFXDrawable)
+  TCustomFXButton = class(TFXGraphicControl)
   private
-    FBGRA: TBGRABitmap;
     FColorActive: TColor;
     FColorDisabled: TColor;
     FColorHover: TColor;
     FColorKind: TMaterialColor;
     FColorNormal: TColor;
     FFontColorAutomatic: boolean;
-    FTexture: IBGLTexture;
     FState: TFXButtonStates;
     FNeedDraw: boolean;
     procedure SetFColorActive(AValue: TColor);
@@ -45,11 +44,7 @@ type
     procedure MouseEnter; override;
     procedure MouseLeave; override;
   protected
-    procedure FXInvalidate;
-    procedure FXDraw;
-    procedure FXPreview(var aCanvas: TCanvas);
-    procedure Draw;
-    procedure Paint; override;
+    procedure Draw; override;
     function GetFillColor: TColor;
   public
     constructor Create(TheOwner: TComponent); override;
@@ -243,37 +238,6 @@ begin
   inherited MouseLeave;
 end;
 
-procedure TCustomFXButton.FXInvalidate;
-begin
-  if (csDesigning in ComponentState) then
-    Invalidate;
-
-  if Parent is TFXContainer then
-  begin
-    if TFXContainer(Parent).ReceivePaintFrom = nil then
-      Parent.Invalidate;
-  end
-  else
-    Invalidate;
-end;
-
-procedure TCustomFXButton.FXDraw;
-begin
-  if (csDesigning in ComponentState) then
-    exit;
-
-  Draw;
-  if (FTexture = nil) then
-    FTexture := BGLTexture(FBGRA);
-  BGLCanvas.PutImage(Left, Top, FTexture);
-end;
-
-procedure TCustomFXButton.FXPreview(var aCanvas: TCanvas);
-begin
-  Draw;
-  FBGRA.Draw(aCanvas, Left, Top, False);
-end;
-
 procedure TCustomFXButton.Draw;
 var
   style: TTextStyle;
@@ -306,14 +270,6 @@ begin
     FNeedDraw := False;
     FTexture := nil;
   end;
-end;
-
-procedure TCustomFXButton.Paint;
-begin
-  if (Parent is TFXContainer) then
-    exit;
-  Draw;
-  FBGRA.Draw(Canvas, 0, 0, False);
 end;
 
 function TCustomFXButton.GetFillColor: TColor;
@@ -365,7 +321,6 @@ end;
 constructor TCustomFXButton.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FBGRA := TBGRABitmap.Create;
   with GetControlClassDefaultSize do
     SetInitialBounds(0, 0, CX, CY);
   FColorNormal := clWhite;
@@ -378,7 +333,6 @@ end;
 
 destructor TCustomFXButton.Destroy;
 begin
-  FreeAndNil(FBGRA);
   inherited Destroy;
 end;
 

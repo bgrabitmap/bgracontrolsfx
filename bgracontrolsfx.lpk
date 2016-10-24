@@ -18,7 +18,7 @@
       </CodeGeneration>
     </CompilerOptions>
     <Version Minor="1"/>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="fxbutton.pas"/>
         <HasRegisterProc Value="True"/>
@@ -27,18 +27,23 @@
       <Item2>
         <Filename Value="fxcontainer.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="fxcontainer"/>
+        <UnitName Value="FXContainer"/>
       </Item2>
       <Item3>
+        <Filename Value="fxgraphiccontrol.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="FXGraphicControl"/>
+      </Item3>
+      <Item4>
         <Filename Value="fxmaterialcolors.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="FXMaterialColors"/>
-      </Item3>
-      <Item4>
+      </Item4>
+      <Item5>
         <Filename Value="fxmaterialdesignbutton.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="FXMaterialDesignButton"/>
-      </Item4>
+      </Item5>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>
