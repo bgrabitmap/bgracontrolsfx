@@ -124,9 +124,12 @@ begin
   Draw;
   for i:=0 to FXLayers.Count-1 do
   begin
-    if (FXLayers[i].Texture = nil) then
-      FXLayers[i].Texture := BGLTexture(FXLayers[i].BGRA);
-    BGLCanvas.PutImage(Left, Top, FXLayers[i].Texture, FXLayers[i].Color);
+    //if (FXLayers[i].Texture = nil) then
+      //FXLayers[i].Texture := BGLTexture(FXLayers[i].BGRA);
+    if FXLayers[i].Color = BGRAPixelTransparent then
+      BGLCanvas.PutImage(Left, Top, BGLTexture(FXLayers[i].BGRA))
+    else
+      BGLCanvas.PutImage(Left, Top, BGLTexture(FXLayers[i].BGRA), FXLayers[i].Color);
   end;
 end;
 
