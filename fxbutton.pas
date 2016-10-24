@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Types,
   FXContainer, BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXMaterialColors,
-  FXGraphicControl;
+  FXGraphicControl, Themes, LCLType;
 
 type
 
@@ -67,6 +67,59 @@ type
     property BidiMode;
     property BorderSpacing;
     property Caption;
+    property ColorKind;
+    property ColorNormal;
+    property ColorHover;
+    property ColorActive;
+    property ColorDisabled;
+    property FontColorAutomatic;
+    property Constraints;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Enabled;
+    property Font;
+    property ParentBidiMode;
+    property OnChangeBounds;
+    property OnClick;
+    property OnContextPopup;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDrag;
+    property OnMouseDown;
+    property OnMouseEnter;
+    property OnMouseLeave;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnMouseWheel;
+    property OnMouseWheelDown;
+    property OnMouseWheelUp;
+    property OnResize;
+    property OnStartDrag;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowHint;
+    property Visible;
+  end;
+
+  { TFXCustomNativeButton }
+
+  TFXCustomNativeButton = class(TCustomFXButton)
+  protected
+    procedure Draw; override;
+  end;
+
+  TFXNativeButton = class(TFXCustomNativeButton)
+    property Action;
+    property Align;
+    property Anchors;
+    property AutoSize;
+    property BidiMode;
+    property BorderSpacing;
+    property Caption;
+    property ColorKind;
+    property FontColorAutomatic;
     property Constraints;
     property DragCursor;
     property DragKind;
@@ -104,6 +157,137 @@ implementation
 procedure Register;
 begin
   RegisterComponents('BGRA Controls FX', [TFXButton]);
+  RegisterComponents('BGRA Controls FX', [TFXNativeButton]);
+end;
+
+function SaveAlphaRect(ABitmap: TBGRABitmap; ARect: TRect): Pointer;
+var
+  Width, Height, Count, y: integer;
+  pAlphaData: PByte;
+  pSrc: PBGRAPixel;
+begin
+  IntersectRect(ARect, ARect, Classes.Rect(0, 0, ABitmap.Width, ABitmap.Height));
+  Width := ARect.Right - ARect.Left;
+  Height := ARect.Bottom - ARect.Top;
+  if (Width <= 0) or (Height <= 0) then
+    Result := nil;
+  getmem(Result, sizeof(longint) * 2 + sizeof(byte) * Width * Height);
+  PLongint(Result)^ := Width;
+  (PLongint(Result) +1)^ := Height;
+  pAlphaData := pbyte(plongint(Result) + 2);
+  for y := ARect.Top to ARect.Bottom - 1 do
+  begin
+    pSrc := ABitmap.ScanLine[y] + ARect.Left;
+    Count := Width;
+    while Count > 0 do
+    begin
+      pAlphaData^ := pSrc^.alpha;
+      Inc(pAlphaData);
+      Inc(pSrc);
+      Dec(Count);
+    end;
+  end;
+end;
+
+procedure RestoreAlphaRectAndFree(ABitmap: TBGRABitmap; AX, AY: integer;
+  ASavedAlphaRect: Pointer);
+var
+  Width, Height, Count, y: integer;
+  pAlphaData: PByte;
+  pSrc: PBGRAPixel;
+begin
+  if ASavedAlphaRect = nil then
+    exit;
+  if AX < 0 then
+    AX := 0;
+  if AY < 0 then
+    AY := 0;
+  Width := PLongint(ASavedAlphaRect)^;
+  Height := (PLongint(ASavedAlphaRect) + 1)^;
+  pAlphaData := pbyte(plongint(ASavedAlphaRect) + 2);
+  for y := AY to AY + Height - 1 do
+  begin
+    pSrc := ABitmap.ScanLine[y] + AX;
+    Count := Width;
+    while Count > 0 do
+    begin
+      pSrc^.alpha := pAlphaData^;
+      Inc(pAlphaData);
+      Inc(pSrc);
+      Dec(Count);
+    end;
+  end;
+  freemem(ASavedAlphaRect);
+end;
+
+{ TFXCustomNativeButton }
+
+procedure TFXCustomNativeButton.Draw;
+var
+  style: TTextStyle;
+  fill_color: TColor;
+  Details: TThemedElementDetails;
+  PaintRect: TRect;
+  AlphaRect: Pointer;
+begin
+  if (Width <> FBGRA.Width) and (Height <> FBGRA.Height) then
+  begin
+    FNeedDraw := True;
+    FBGRA.SetSize(Width, Height);
+  end;
+
+  if FNeedDraw then
+  begin
+    FBGRA.FillTransparent;
+    if mcDefault = ColorKind then
+    begin
+      PaintRect := Rect(0, 0, FBGRA.Width, FBGRA.Height);
+
+      if Enabled then
+      begin
+        { Button Down }
+        if fxbActive in FState then
+          Details := ThemeServices.GetElementDetails(tbPushButtonPressed)
+        else
+        begin
+          { Button Hovered }
+          if fxbHovered in FState then
+            Details := ThemeServices.GetElementDetails(tbPushButtonHot)
+          { Button Normal }
+          else
+            Details := ThemeServices.GetElementDetails(tbPushButtonNormal);
+        end;
+      end
+      { Button Disabled }
+      else
+        Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
+
+      ThemeServices.DrawElement(FBGRA.Canvas.Handle, Details, PaintRect, nil);
+      PaintRect := ThemeServices.ContentRect(FBGRA.Canvas.Handle, Details, PaintRect);
+      AlphaRect := SaveAlphaRect(FBGRA, PaintRect);
+      ThemeServices.DrawText(FBGRA.Canvas, Details, Caption, PaintRect,
+        DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
+      RestoreAlphaRectAndFree(FBGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
+    end
+    else
+    begin
+      style.Alignment := taCenter;
+      style.Layout := tlCenter;
+      FBGRA.FontHeight := Font.GetTextHeight(Caption);
+      FBGRA.FontAntialias := True;
+
+      fill_color := GetFillColor;
+      FBGRA.Fill(fill_color);
+
+      if FontColorAutomatic then
+        FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style,
+          GetContrastColor(fill_color))
+      else
+        FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+    end;
+    FNeedDraw := False;
+    FTexture := nil;
+  end;
 end;
 
 { TCustomFXButton }
