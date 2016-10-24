@@ -149,11 +149,14 @@ begin
 end;
 
 procedure TFXGraphicControl.Paint;
+var
+  i: integer;
 begin
   if (Parent is TFXContainer) then
     exit;
   Draw;
-  FXLayers[0].BGRA.Draw(Canvas, 0, 0, False);
+  for i:=0 to FXLayers.Count-1 do
+    FXLayers[i].BGRA.Draw(Canvas, 0, 0, False);
 end;
 
 constructor TFXGraphicControl.Create(TheOwner: TComponent);

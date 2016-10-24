@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Types, LResources, Forms, Controls, Graphics, Dialogs,
-  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, FXContainer, ExtCtrls, FXMaterialColors,
+  BGRABitmap, BGRABitmapTypes, BGRAOpenGL, ExtCtrls, FXMaterialColors,
   FXGraphicControl;
 
 type
