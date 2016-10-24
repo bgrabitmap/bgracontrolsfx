@@ -263,6 +263,7 @@ begin
         Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
 
       ThemeServices.DrawElement(FBGRA.Canvas.Handle, Details, PaintRect, nil);
+      FBGRA.Canvas.Changed;
       PaintRect := ThemeServices.ContentRect(FBGRA.Canvas.Handle, Details, PaintRect);
       AlphaRect := SaveAlphaRect(FBGRA, PaintRect);
       ThemeServices.DrawText(FBGRA.Canvas, Details, Caption, PaintRect,
