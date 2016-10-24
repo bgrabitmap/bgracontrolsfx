@@ -224,7 +224,6 @@ end;
 
 procedure TFXCustomNativeButton.Draw;
 var
-  style: TTextStyle;
   Details: TThemedElementDetails;
   PaintRect: TRect;
   AlphaRect: Pointer;
