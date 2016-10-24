@@ -241,6 +241,9 @@ begin
     FXLayers[0].BGRA.FillTransparent;
     if mcDefault = ColorKind then
     begin
+      {$IFDEF LINUX}
+        FXLayers[0].BGRA.Fill(ColorToBGRA(ColorToRGB(Parent.Color)));
+      {$ENDIF}
       PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
 
       if Enabled then
@@ -263,13 +266,11 @@ begin
         Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
 
       ThemeServices.DrawElement(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect, nil);
-      FXLayers[0].BGRA.Canvas.Changed;
-      //PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
+      PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
       AlphaRect := SaveAlphaRect(FXLayers[0].BGRA, PaintRect);
       ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
         DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
       RestoreAlphaRectAndFree(FXLayers[0].BGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
-      FXLayers[0].BGRA.Canvas.Changed;
     end
     else
     begin
