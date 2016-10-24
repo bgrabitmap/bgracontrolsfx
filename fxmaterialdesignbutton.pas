@@ -317,13 +317,13 @@ begin
 
   if Caption <> '' then
   begin
-    FBGRA.FontQuality := FTextQuality;
-    FBGRA.FontName := FTextFont;
-    FBGRA.FontStyle := FTextStyle;
-    FBGRA.FontHeight := FTextSize;
-    FBGRA.FontAntialias := True;
+    FXLayers[0].BGRA.FontQuality := FTextQuality;
+    FXLayers[0].BGRA.FontName := FTextFont;
+    FXLayers[0].BGRA.FontStyle := FTextStyle;
+    FXLayers[0].BGRA.FontHeight := FTextSize;
+    FXLayers[0].BGRA.FontAntialias := True;
 
-    ts := FBGRA.TextSize(Caption);
+    ts := FXLayers[0].BGRA.TextSize(Caption);
     Inc(PreferredWidth, ts.cx + 26);
     Inc(PreferredHeight, ts.cy + 10);
   end;
@@ -444,14 +444,14 @@ var
   OutTxtSize: TSize;
   OutX, OutY: integer;
 begin
-  FBGRA.FontAntialias := True;
-  FBGRA.FontHeight := TextSize;
-  FBGRA.FontStyle := TextStyle;
-  FBGRA.FontName := TextFont;
-  FBGRA.FontQuality := TextQuality;
+  FXLayers[0].BGRA.FontAntialias := True;
+  FXLayers[0].BGRA.FontHeight := TextSize;
+  FXLayers[0].BGRA.FontStyle := TextStyle;
+  FXLayers[0].BGRA.FontName := TextFont;
+  FXLayers[0].BGRA.FontQuality := TextQuality;
 
-  OutTxtSize := FBGRA.TextSize(Caption);
-  OutX := Round(FBGRA.Width / 2) - Round(OutTxtSize.cx / 2);
+  OutTxtSize := FXLayers[0].BGRA.TextSize(Caption);
+  OutX := Round(FXLayers[0].BGRA.Width / 2) - Round(OutTxtSize.cx / 2);
   OutY := Round(AHeight / 2) - Round(OutTxtSize.cy / 2);
 
   if FTextShadow then
@@ -467,13 +467,13 @@ begin
     bmpSdw.TextOut(FTextShadowSize, FTextShadowSize, Caption, FTextShadowColor);
     BGRAReplace(bmpSdw, bmpSdw.FilterBlurRadial(FTextShadowSize /
       sqrt(2), FTextShadowSize / sqrt(2), rbBox));
-    FBGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
+    FXLayers[0].BGRA.PutImage(OutX + FTextShadowOffsetX - FTextShadowSize, OutY +
       FTextShadowOffSetY - FTextShadowSize, bmpSdw,
       dmDrawWithTransparency);
     bmpSdw.Free;
   end;
 
-  FBGRA.TextOut(OutX, OutY, Caption, ATextColor);
+  FXLayers[0].BGRA.TextOut(OutX, OutY, Caption, ATextColor);
 end;
 
 procedure TFXMaterialDesignButton.Draw;
@@ -488,18 +488,18 @@ var
 begin
   if (Width - 1 > FRoundBorders * 2) and (Height - 1 > FRoundBorders * 2) then
   begin
-    if (FBGRA.Width <> Width) or (FBGRA.Height <> Height) then
+    if (FXLayers[0].BGRA.Width <> Width) or (FXLayers[0].BGRA.Height <> Height) then
     begin
-      FBGRA.SetSize(Width, Height);
+      FXLayers[0].BGRA.SetSize(Width, Height);
       FBGRAShadow.SetSize(Width, Height);
       UpdateShadow;
     end;
 
     if FNeedDraw then
     begin
-      FBGRA.FillTransparent;
+      FXLayers[0].BGRA.FillTransparent;
       if FShadow then
-        FBGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
+        FXLayers[0].BGRA.PutImage(0, 0, FBGRAShadow, dmDrawWithTransparency);
 
       if ColorKind = mcDefault then
       begin
@@ -530,7 +530,7 @@ begin
         round_rect_height := Height;
       end;
 
-      FBGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width,
+      FXLayers[0].BGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width,
         round_rect_height,
         FRoundBorders, FRoundBorders, temp, [rrDefault], False);
 
@@ -549,13 +549,13 @@ begin
       end;
 
       FNeedDraw := False;
-      FTexture := nil;
+      FXLayers[0].Texture := nil;
     end;
   end
   else
   begin
-    FBGRA.FillTransparent;
-    FTexture := nil;
+    FXLayers[0].BGRA.FillTransparent;
+    FXLayers[0].Texture := nil;
   end;
 end;
 

@@ -230,18 +230,18 @@ var
   PaintRect: TRect;
   AlphaRect: Pointer;
 begin
-  if (Width <> FBGRA.Width) and (Height <> FBGRA.Height) then
+  if (Width <> FXLayers[0].BGRA.Width) and (Height <> FXLayers[0].BGRA.Height) then
   begin
     FNeedDraw := True;
-    FBGRA.SetSize(Width, Height);
+    FXLayers[0].BGRA.SetSize(Width, Height);
   end;
 
   if FNeedDraw then
   begin
-    FBGRA.FillTransparent;
+    FXLayers[0].BGRA.FillTransparent;
     if mcDefault = ColorKind then
     begin
-      PaintRect := Rect(0, 0, FBGRA.Width, FBGRA.Height);
+      PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
 
       if Enabled then
       begin
@@ -262,32 +262,32 @@ begin
       else
         Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
 
-      ThemeServices.DrawElement(FBGRA.Canvas.Handle, Details, PaintRect, nil);
-      FBGRA.Canvas.Changed;
-      PaintRect := ThemeServices.ContentRect(FBGRA.Canvas.Handle, Details, PaintRect);
-      AlphaRect := SaveAlphaRect(FBGRA, PaintRect);
-      ThemeServices.DrawText(FBGRA.Canvas, Details, Caption, PaintRect,
+      ThemeServices.DrawElement(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect, nil);
+      FXLayers[0].BGRA.Canvas.Changed;
+      PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
+      AlphaRect := SaveAlphaRect(FXLayers[0].BGRA, PaintRect);
+      ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
         DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
-      RestoreAlphaRectAndFree(FBGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
+      RestoreAlphaRectAndFree(FXLayers[0].BGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
     end
     else
     begin
       style.Alignment := taCenter;
       style.Layout := tlCenter;
-      FBGRA.FontHeight := Font.GetTextHeight(Caption);
-      FBGRA.FontAntialias := True;
+      FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
+      FXLayers[0].BGRA.FontAntialias := True;
 
       fill_color := GetFillColor;
-      FBGRA.Fill(fill_color);
+      FXLayers[0].BGRA.Fill(fill_color);
 
       if FontColorAutomatic then
-        FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style,
+        FXLayers[0].BGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style,
           GetContrastColor(fill_color))
       else
-        FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+        FXLayers[0].BGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
     end;
     FNeedDraw := False;
-    FTexture := nil;
+    FXLayers[0].Texture := nil;
   end;
 end;
 
@@ -363,10 +363,10 @@ begin
 
   if Caption <> '' then
   begin
-    FBGRA.FontHeight := Font.GetTextHeight(Caption);
-    FBGRA.FontAntialias := True;
+    FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
+    FXLayers[0].BGRA.FontAntialias := True;
 
-    ts := FBGRA.TextSize(Caption);
+    ts := FXLayers[0].BGRA.TextSize(Caption);
     Inc(PreferredWidth, ts.cx + 26);
     Inc(PreferredHeight, ts.cy + 10);
   end;
@@ -428,32 +428,32 @@ var
   style: TTextStyle;
   fill_color: TColor;
 begin
-  if (Width <> FBGRA.Width) and (Height <> FBGRA.Height) then
+  if (Width <> FXLayers[0].BGRA.Width) and (Height <> FXLayers[0].BGRA.Height) then
   begin
     FNeedDraw := True;
-    FBGRA.SetSize(Width, Height);
+    FXLayers[0].BGRA.SetSize(Width, Height);
   end;
 
   if FNeedDraw then
   begin
-    FBGRA.FillTransparent;
+    FXLayers[0].BGRA.FillTransparent;
 
     style.Alignment := taCenter;
     style.Layout := tlCenter;
-    FBGRA.FontHeight := Font.GetTextHeight(Caption);
-    FBGRA.FontAntialias := True;
+    FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
+    FXLayers[0].BGRA.FontAntialias := True;
 
     fill_color := GetFillColor;
-    FBGRA.Fill(fill_color);
+    FXLayers[0].BGRA.Fill(fill_color);
 
     if FontColorAutomatic then
-      FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style,
+      FXLayers[0].BGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style,
         GetContrastColor(fill_color))
     else
-      FBGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
+      FXLayers[0].BGRA.TextRect(Rect(0, 0, Width, Height), 0, 0, Caption, style, Font.Color);
 
     FNeedDraw := False;
-    FTexture := nil;
+    FXLayers[0].Texture := nil;
   end;
 end;
 
