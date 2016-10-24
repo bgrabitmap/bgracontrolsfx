@@ -230,7 +230,7 @@ var
   PaintRect: TRect;
   AlphaRect: Pointer;
 begin
-  if (FXLayers[0].BGRA.Width <> ClientWidth) and (FXLayers[0].BGRA.Height <> ClientHeight) then
+  if (FXLayers[0].BGRA.Width <> ClientWidth) or (FXLayers[0].BGRA.Height <> ClientHeight) then
   begin
     FNeedDraw := True;
     FXLayers[0].BGRA.SetSize(ClientWidth, ClientHeight);
@@ -241,7 +241,7 @@ begin
     FXLayers[0].BGRA.FillTransparent;
     if mcDefault = ColorKind then
     begin
-      PaintRect := Rect(0, 0, ClientWidth, ClientHeight);
+      PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
 
       if Enabled then
       begin
@@ -264,7 +264,7 @@ begin
 
       ThemeServices.DrawElement(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect, nil);
       FXLayers[0].BGRA.Canvas.Changed;
-      PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
+      //PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
       AlphaRect := SaveAlphaRect(FXLayers[0].BGRA, PaintRect);
       ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
         DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
