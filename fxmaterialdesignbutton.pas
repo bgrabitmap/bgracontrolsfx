@@ -573,7 +573,7 @@ begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := @OnStartTimer;
   FTimer.OnTimer := @OnTimer;
-  FXLayers.Insert(0, TFXLayer.CreateNew);
+  FXLayers.Insert(0, TFXLayer.Create);
   FRoundBorders := 5;
   FNormalColor := clWhite;
   FNormalColorEffect := clSilver;

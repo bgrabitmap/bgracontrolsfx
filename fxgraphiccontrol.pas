@@ -12,7 +12,7 @@ type
 
   { TFXLayer }
 
-  TFXLayer = record
+  TFXLayer = class
   private
     FTexture: IBGLTexture;
     FBGRA: TBGRABitmap;
@@ -21,10 +21,8 @@ type
     procedure SetFColor(AValue: TBGRAPixel);
     procedure SetFTexture(AValue: IBGLTexture);
   public
-    class function CreateNew: TFXLayer; static;
-    procedure Create;
-    procedure Free;
-    class operator =(Source1, Source2: TFXLayer): boolean;
+    constructor Create;
+    destructor Destroy; override;
     property Texture: IBGLTexture read FTexture write SetFTexture;
     property BGRA: TBGRABitmap read FBGRA write SetFBGRA;
     property Color: TBGRAPixel read FColor write SetFColor;
@@ -43,6 +41,8 @@ type
     procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw; virtual;
     procedure Paint; override;
+    procedure DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel; Dest: TCanvas; x, y: integer; Opaque: boolean = True);
+    procedure Colorize(Source, Dest: TBGRABitmap; c: TBGRAPixel);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -58,6 +58,21 @@ begin
   FTexture:=AValue;
 end;
 
+constructor TFXLayer.Create;
+begin
+  inherited Create;
+  FBGRA := TBGRABitmap.Create;
+  FColor := BGRAWhite;
+end;
+
+destructor TFXLayer.Destroy;
+begin
+  if Assigned(FBGRA) then
+    FBGRA.Free;
+  FTexture := nil;
+  inherited Destroy;
+end;
+
 procedure TFXLayer.SetFBGRA(AValue: TBGRABitmap);
 begin
   if FBGRA=AValue then Exit;
@@ -68,32 +83,6 @@ procedure TFXLayer.SetFColor(AValue: TBGRAPixel);
 begin
   if FColor=AValue then Exit;
   FColor:=AValue;
-end;
-
-class function TFXLayer.CreateNew: TFXLayer;
-begin
-  Result.Create;
-end;
-
-procedure TFXLayer.Create;
-begin
-  BGRA := TBGRABitmap.Create;
-  Color := BGRAPixelTransparent;
-end;
-
-procedure TFXLayer.Free;
-begin
-  if BGRA <> nil then
-    BGRA.Free;
-  Texture := nil;
-end;
-
-class operator TFXLayer.=(Source1, Source2: TFXLayer): boolean;
-begin
-  if (Source1.Color = Source2.Color) and (Source1.BGRA = Source2.BGRA) then
-    Result := True
-  else
-    Result := False;
 end;
 
 { TFXGraphicControl }
@@ -124,12 +113,9 @@ begin
   Draw;
   for i:=0 to FXLayers.Count-1 do
   begin
-    //if (FXLayers[i].Texture = nil) then
-      //FXLayers[i].Texture := BGLTexture(FXLayers[i].BGRA);
-    if FXLayers[i].Color = BGRAPixelTransparent then
-      BGLCanvas.PutImage(Left, Top, BGLTexture(FXLayers[i].BGRA))
-    else
-      BGLCanvas.PutImage(Left, Top, BGLTexture(FXLayers[i].BGRA), FXLayers[i].Color);
+    if (FXLayers[i].Texture = nil) then
+      FXLayers[i].Texture := BGLTexture(FXLayers[i].BGRA);
+      BGLCanvas.PutImage(Left, Top, FXLayers[i].Texture, FXLayers[i].Color);
   end;
 end;
 
@@ -139,7 +125,12 @@ var
 begin
   Draw;
   for i:=0 to FXLayers.Count-1 do
-    FXLayers[i].BGRA.Draw(aCanvas, Left, Top, False);
+  begin
+    if FXLayers[i].Color <> BGRAWhite then
+      DrawWithColor(FXLayers[i].BGRA, FXLayers[i].Color, aCanvas, Left, Top, False)
+    else
+      FXLayers[i].BGRA.Draw(aCanvas, Left, Top, False);
+  end;
 end;
 
 procedure TFXGraphicControl.Draw;
@@ -159,14 +150,50 @@ begin
     exit;
   Draw;
   for i:=0 to FXLayers.Count-1 do
-    FXLayers[i].BGRA.Draw(Canvas, 0, 0, False);
+  begin
+    if FXLayers[i].Color <> BGRAWhite then
+      DrawWithColor(FXLayers[i].BGRA, FXLayers[i].Color, Canvas, 0, 0, False)
+    else
+      FXLayers[i].BGRA.Draw(Canvas, 0, 0, False);
+  end;
+end;
+
+procedure TFXGraphicControl.DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel; Dest: TCanvas; x, y: integer; Opaque: boolean = True);
+var
+  temp: TBGRABitmap;
+begin
+  temp := TBGRABitmap.Create(Source.Width, Source.Height);
+  Colorize(Source, temp, c);
+  temp.Draw(Dest, x, y, Opaque);
+  temp.Free;
+end;
+
+procedure TFXGraphicControl.Colorize(Source, Dest: TBGRABitmap; c: TBGRAPixel);
+var
+  psource: PBGRAPixel;
+  pdest: PBGRAPixel;
+  ec: TExpandedPixel;
+  n: integer;
+begin
+  psource := Source.Data;
+  pdest := Dest.Data;
+  ec := GammaExpansion(c);
+  for n := source.NbPixels-1 downto 0 do
+  begin
+    pdest^.red := GammaCompressionTab[((GammaExpansionTab[psource^.red]*ec.red+65535) shr 16)];
+    pdest^.green := GammaCompressionTab[((GammaExpansionTab[psource^.green]*ec.green+65535) shr 16)];
+    pdest^.blue := GammaCompressionTab[((GammaExpansionTab[psource^.blue]*ec.blue+65535) shr 16)];
+    pdest^.alpha := (pdest^.alpha*ec.alpha+255) shr 16;
+    inc(pdest);
+    inc(psource);
+  end;
 end;
 
 constructor TFXGraphicControl.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FXLayers := TFXLayers.Create;
-  FXLayers.Add(TFXLayer.CreateNew);
+  FXLayers.Add(TFXLayer.Create);
 end;
 
 destructor TFXGraphicControl.Destroy;
