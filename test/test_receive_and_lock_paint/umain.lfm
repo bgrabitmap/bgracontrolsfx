@@ -20,7 +20,7 @@ object frmMain: TfrmMain
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
     Color = clWhite
-    object FXMaterialDesignButton1: TFXMaterialDesignButton
+    object FXMaterialButton1: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 0
@@ -30,9 +30,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton1'
+      Caption = 'FXMaterialButton1'
     end
-    object FXMaterialDesignButton2: TFXMaterialDesignButton
+    object FXMaterialButton2: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 67
@@ -42,9 +42,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton2'
+      Caption = 'FXMaterialButton2'
     end
-    object FXMaterialDesignButton3: TFXMaterialDesignButton
+    object FXMaterialButton3: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 134
@@ -54,9 +54,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton3'
+      Caption = 'FXMaterialButton3'
     end
-    object FXMaterialDesignButton4: TFXMaterialDesignButton
+    object FXMaterialButton4: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 201
@@ -66,9 +66,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton4'
+      Caption = 'FXMaterialButton4'
     end
-    object FXMaterialDesignButton5: TFXMaterialDesignButton
+    object FXMaterialButton5: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 268
@@ -78,9 +78,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton5'
+      Caption = 'FXMaterialButton5'
     end
-    object FXMaterialDesignButton6: TFXMaterialDesignButton
+    object FXMaterialButton6: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 335
@@ -90,9 +90,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton6'
+      Caption = 'FXMaterialButton6'
     end
-    object FXMaterialDesignButton7: TFXMaterialDesignButton
+    object FXMaterialButton7: TFXMaterialButton
       Left = 0
       Height = 67
       Top = 402
@@ -102,9 +102,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton7'
+      Caption = 'FXMaterialButton7'
     end
-    object FXMaterialDesignButton8: TFXMaterialDesignButton
+    object FXMaterialButton8: TFXMaterialButton
       Left = 0
       Height = 62
       Top = 469
@@ -114,7 +114,7 @@ object frmMain: TfrmMain
       TextFont = 'default'
       TextQuality = fqSystemClearType
       AutoSize = True
-      Caption = 'FXMaterialDesignButton8'
+      Caption = 'FXMaterialButton8'
     end
   end
   object Timer1: TTimer

@@ -15,14 +15,14 @@ object frmMain: TfrmMain
     Align = alLeft
     AutoResizeViewport = True
     Color = clWhite
-    object FXMaterialDesignButton1: TFXMaterialDesignButton
+    object FXMaterialButton1: TFXMaterialButton
       Left = 8
       Height = 42
       Top = 8
       Width = 216
       TextFont = 'default'
       AutoSize = True
-      Caption = 'FXMaterialDesignButton1'
+      Caption = 'FXMaterialButton1'
     end
     object FXContainer3: TFXContainer
       Left = 0
@@ -32,14 +32,14 @@ object frmMain: TfrmMain
       Align = alBottom
       AutoResizeViewport = True
       Color = clWhite
-      object FXMaterialDesignButton3: TFXMaterialDesignButton
+      object FXMaterialButton3: TFXMaterialButton
         Left = 8
         Height = 42
         Top = 8
         Width = 216
         TextFont = 'default'
         AutoSize = True
-        Caption = 'FXMaterialDesignButton3'
+        Caption = 'FXMaterialButton3'
       end
     end
     object Splitter2: TSplitter
@@ -60,14 +60,14 @@ object frmMain: TfrmMain
     Align = alClient
     AutoResizeViewport = True
     Color = clWhite
-    object FXMaterialDesignButton2: TFXMaterialDesignButton
+    object FXMaterialButton2: TFXMaterialButton
       Left = 8
       Height = 42
       Top = 8
       Width = 216
       TextFont = 'default'
       AutoSize = True
-      Caption = 'FXMaterialDesignButton2'
+      Caption = 'FXMaterialButton2'
     end
   end
   object Splitter1: TSplitter

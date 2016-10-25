@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  FXContainer, FXMaterialDesignButton;
+  FXContainer, FXMaterialButton;
 
 type
 
@@ -14,8 +14,8 @@ type
 
   TfrmMain = class(TForm)
     FXContainer1: TFXContainer;
-    FXMaterialDesignButton1: TFXMaterialDesignButton;
-    FXMaterialDesignButton2: TFXMaterialDesignButton;
+    FXMaterialDesignButton1: TFXMaterialButton;
+    FXMaterialDesignButton2: TFXMaterialButton;
     Splitter1: TSplitter;
   private
 

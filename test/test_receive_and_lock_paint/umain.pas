@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  FXContainer, FXMaterialDesignButton, FXButton;
+  FXContainer, FXMaterialButton, FXButton;
 
 type
 
@@ -14,14 +14,14 @@ type
 
   TfrmMain = class(TForm)
     FXContainer1: TFXContainer;
-    FXMaterialDesignButton1: TFXMaterialDesignButton;
-    FXMaterialDesignButton2: TFXMaterialDesignButton;
-    FXMaterialDesignButton3: TFXMaterialDesignButton;
-    FXMaterialDesignButton4: TFXMaterialDesignButton;
-    FXMaterialDesignButton5: TFXMaterialDesignButton;
-    FXMaterialDesignButton6: TFXMaterialDesignButton;
-    FXMaterialDesignButton7: TFXMaterialDesignButton;
-    FXMaterialDesignButton8: TFXMaterialDesignButton;
+    FXMaterialButton1: TFXMaterialButton;
+    FXMaterialButton2: TFXMaterialButton;
+    FXMaterialButton3: TFXMaterialButton;
+    FXMaterialButton4: TFXMaterialButton;
+    FXMaterialButton5: TFXMaterialButton;
+    FXMaterialButton6: TFXMaterialButton;
+    FXMaterialButton7: TFXMaterialButton;
+    FXMaterialButton8: TFXMaterialButton;
     Timer1: TTimer;
     procedure Timer1StartTimer(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);

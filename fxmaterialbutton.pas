@@ -1,4 +1,4 @@
-unit FXMaterialDesignButton;
+unit fxmaterialbutton;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TFXMaterialDesignButton }
+  { TFXMaterialButton }
 
-  TFXMaterialDesignButton = class(TFXGraphicControl)
+  TFXMaterialButton = class(TFXGraphicControl)
   private
     FColorKind: TMaterialColor;
     FFontColorAutomatic: boolean;
@@ -141,12 +141,12 @@ implementation
 
 procedure Register;
 begin
-  RegisterComponents('BGRA Controls FX', [TFXMaterialDesignButton]);
+  RegisterComponents('BGRA Controls FX', [TFXMaterialButton]);
 end;
 
-{ TFXMaterialDesignButton }
+{ TFXMaterialButton }
 
-procedure TFXMaterialDesignButton.SetFRoundBorders(AValue: single);
+procedure TFXMaterialButton.SetFRoundBorders(AValue: single);
 begin
   if FRoundBorders = AValue then
     Exit;
@@ -156,7 +156,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFShadow(AValue: boolean);
+procedure TFXMaterialButton.SetFShadow(AValue: boolean);
 begin
   if FShadow = AValue then
     Exit;
@@ -168,7 +168,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFShadowColor(AValue: TColor);
+procedure TFXMaterialButton.SetFShadowColor(AValue: TColor);
 begin
   if FShadowColor = AValue then
     Exit;
@@ -178,7 +178,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFShadowSize(AValue: integer);
+procedure TFXMaterialButton.SetFShadowSize(AValue: integer);
 begin
   if FShadowSize = AValue then
     Exit;
@@ -190,7 +190,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextColor(AValue: TColor);
+procedure TFXMaterialButton.SetFTextColor(AValue: TColor);
 begin
   if FTextColor = AValue then
     Exit;
@@ -200,7 +200,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextFont(AValue: string);
+procedure TFXMaterialButton.SetFTextFont(AValue: string);
 begin
   if FTextFont = AValue then
     Exit;
@@ -212,7 +212,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextQuality(AValue: TBGRAFontQuality);
+procedure TFXMaterialButton.SetFTextQuality(AValue: TBGRAFontQuality);
 begin
   if FTextQuality = AValue then
     Exit;
@@ -224,7 +224,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextShadow(AValue: boolean);
+procedure TFXMaterialButton.SetFTextShadow(AValue: boolean);
 begin
   if FTextShadow = AValue then
     Exit;
@@ -236,7 +236,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextShadowColor(AValue: TColor);
+procedure TFXMaterialButton.SetFTextShadowColor(AValue: TColor);
 begin
   if FTextShadowColor = AValue then
     Exit;
@@ -246,7 +246,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextShadowOffsetX(AValue: integer);
+procedure TFXMaterialButton.SetFTextShadowOffsetX(AValue: integer);
 begin
   if FTextShadowOffsetX = AValue then
     Exit;
@@ -258,7 +258,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextShadowOffsetY(AValue: integer);
+procedure TFXMaterialButton.SetFTextShadowOffsetY(AValue: integer);
 begin
   if FTextShadowOffsetY = AValue then
     Exit;
@@ -270,7 +270,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextShadowSize(AValue: integer);
+procedure TFXMaterialButton.SetFTextShadowSize(AValue: integer);
 begin
   if FTextShadowSize = AValue then
     Exit;
@@ -282,7 +282,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextSize(AValue: integer);
+procedure TFXMaterialButton.SetFTextSize(AValue: integer);
 begin
   if FTextSize = AValue then
     Exit;
@@ -294,7 +294,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFTextStyle(AValue: TFontStyles);
+procedure TFXMaterialButton.SetFTextStyle(AValue: TFontStyles);
 begin
   if FTextStyle = AValue then
     Exit;
@@ -306,7 +306,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.CalculatePreferredSize(
+procedure TFXMaterialButton.CalculatePreferredSize(
   var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
 var
   ts: TSize;
@@ -334,7 +334,7 @@ begin
   end;
 end;
 
-procedure TFXMaterialDesignButton.SetFNormalColor(AValue: TColor);
+procedure TFXMaterialButton.SetFNormalColor(AValue: TColor);
 begin
   if FNormalColor = AValue then
     Exit;
@@ -344,7 +344,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFColorKind(AValue: TMaterialColor);
+procedure TFXMaterialButton.SetFColorKind(AValue: TMaterialColor);
 begin
   if FColorKind = AValue then
     Exit;
@@ -354,7 +354,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFFontColorAutomatic(AValue: boolean);
+procedure TFXMaterialButton.SetFFontColorAutomatic(AValue: boolean);
 begin
   if FFontColorAutomatic = AValue then
     Exit;
@@ -364,7 +364,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.SetFNormalColorEffect(AValue: TColor);
+procedure TFXMaterialButton.SetFNormalColorEffect(AValue: TColor);
 begin
   if FNormalColorEffect = AValue then
     Exit;
@@ -374,13 +374,13 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.OnStartTimer(Sender: TObject);
+procedure TFXMaterialButton.OnStartTimer(Sender: TObject);
 begin
   FCircleAlpha := 255;
   FCircleSize := 0;
 end;
 
-procedure TFXMaterialDesignButton.OnTimer(Sender: TObject);
+procedure TFXMaterialButton.OnTimer(Sender: TObject);
 begin
   FNeedDraw := True;
 
@@ -399,7 +399,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.MouseDown(Button: TMouseButton;
+procedure TFXMaterialButton.MouseDown(Button: TMouseButton;
   Shift: TShiftState; X, Y: integer);
 begin
   if Button = mbLeft then
@@ -411,13 +411,13 @@ begin
   inherited MouseDown(Button, Shift, X, Y);
 end;
 
-class function TFXMaterialDesignButton.GetControlClassDefaultSize: TSize;
+class function TFXMaterialButton.GetControlClassDefaultSize: TSize;
 begin
   Result.CX := 123;
   Result.CY := 33;
 end;
 
-procedure TFXMaterialDesignButton.TextChanged;
+procedure TFXMaterialButton.TextChanged;
 begin
   InvalidatePreferredSize;
   AdjustSize;
@@ -426,7 +426,7 @@ begin
     FXInvalidate;
 end;
 
-procedure TFXMaterialDesignButton.UpdateShadow;
+procedure TFXMaterialButton.UpdateShadow;
 var
   temp: TBGRABitmap;
 begin
@@ -444,7 +444,7 @@ begin
   FNeedDraw := True;
 end;
 
-procedure TFXMaterialDesignButton.DrawTextShadow(AHeight: integer; ATextColor: TColor);
+procedure TFXMaterialButton.DrawTextShadow(AHeight: integer; ATextColor: TColor);
 var
   bmpSdw: TBGRABitmap;
   OutTxtSize: TSize;
@@ -482,7 +482,7 @@ begin
   FXLayers[1].BGRA.TextOut(OutX, OutY, Caption, ATextColor);
 end;
 
-procedure TFXMaterialDesignButton.Draw;
+procedure TFXMaterialButton.Draw;
 var
   temp: TBGRABitmap;
   round_rect_left: integer;
@@ -563,7 +563,7 @@ begin
   end;
 end;
 
-constructor TFXMaterialDesignButton.Create(AOwner: TComponent);
+constructor TFXMaterialButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   with GetControlClassDefaultSize do
@@ -593,7 +593,7 @@ begin
   FFontColorAutomatic := True;
 end;
 
-destructor TFXMaterialDesignButton.Destroy;
+destructor TFXMaterialButton.Destroy;
 begin
   FTimer.Enabled := False;
   FTimer.OnStartTimer := nil;

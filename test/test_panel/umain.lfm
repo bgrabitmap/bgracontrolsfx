@@ -42,7 +42,7 @@ object frmMain: TfrmMain
       Caption = 'Third'
       Enabled = False
     end
-    object FXMaterialDesignButton2: TFXMaterialDesignButton
+    object FXMaterialButton2: TFXMaterialButton
       Left = 160
       Height = 72
       Top = 152
@@ -55,9 +55,9 @@ object frmMain: TfrmMain
       TextFont = 'default'
       Anchors = [akTop, akLeft, akRight, akBottom]
       AutoSize = True
-      Caption = 'FXMaterialDesignButton2'
+      Caption = 'FXMaterialButton2'
     end
-    object FXMaterialDesignButton3: TFXMaterialDesignButton
+    object FXMaterialButton3: TFXMaterialButton
       Left = 694
       Height = 72
       Top = 312

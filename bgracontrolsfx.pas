@@ -4,10 +4,11 @@
 
 unit BGRAControlsFX;
 
+{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  FXButton, FXContainer, FXMaterialDesignButton, LazarusPackageIntf;
+  FXButton, FXContainer, fxmaterialbutton, LazarusPackageIntf;
 
 implementation
 
@@ -15,7 +16,7 @@ procedure Register;
 begin
   RegisterUnit('FXButton', @FXButton.Register);
   RegisterUnit('FXContainer', @FXContainer.Register);
-  RegisterUnit('FXMaterialDesignButton', @FXMaterialDesignButton.Register);
+  RegisterUnit('fxmaterialbutton', @fxmaterialbutton.Register);
 end;
 
 initialization

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, FXContainer, FXButton, FXMaterialDesignButton, BGRABitmap,
+  StdCtrls, FXContainer, FXButton, FXMaterialButton, BGRABitmap,
   BGRABitmapTypes, BGRAOpenGL, FXMaterialColors, Math;
 
 type
@@ -19,8 +19,8 @@ type
     FXButton2: TFXButton;
     FXButton3: TFXButton;
     FXContainer1: TFXContainer;
-    FXMaterialDesignButton2: TFXMaterialDesignButton;
-    FXMaterialDesignButton3: TFXMaterialDesignButton;
+    FXMaterialButton2: TFXMaterialButton;
+    FXMaterialButton3: TFXMaterialButton;
     Panel1: TPanel;
     procedure ComboBox1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -64,8 +64,8 @@ begin
   begin
     if FXContainer1.Controls[i] is TFXButton then
       TFXButton(FXContainer1.Controls[i]).ColorKind := StrToMaterialColor(ComboBox1.Caption);
-    if FXContainer1.Controls[i] is TFXMaterialDesignButton then
-      TFXMaterialDesignButton(FXContainer1.Controls[i]).ColorKind := StrToMaterialColor(ComboBox1.Caption);
+    if FXContainer1.Controls[i] is TFXMaterialButton then
+      TFXMaterialButton(FXContainer1.Controls[i]).ColorKind := StrToMaterialColor(ComboBox1.Caption);
   end;
 end;
 

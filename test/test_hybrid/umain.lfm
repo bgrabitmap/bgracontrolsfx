@@ -15,24 +15,28 @@ object frmMain: TfrmMain
     Align = alLeft
     AutoResizeViewport = True
     Color = clWhite
-    object FXMaterialDesignButton1: TFXMaterialDesignButton
+    object FXMaterialButton1: TFXMaterialButton
       Left = 8
       Height = 42
       Top = 8
-      Width = 216
+      Width = 168
+      ColorKind = mcDefault
+      FontColorAutomatic = True
       TextFont = 'default'
       AutoSize = True
-      Caption = 'FXMaterialDesignButton1'
+      Caption = 'FXMaterialButton1'
     end
   end
-  object FXMaterialDesignButton2: TFXMaterialDesignButton
+  object FXMaterialButton2: TFXMaterialButton
     Left = 232
     Height = 42
     Top = 8
-    Width = 216
+    Width = 168
+    ColorKind = mcDefault
+    FontColorAutomatic = True
     TextFont = 'default'
     AutoSize = True
-    Caption = 'FXMaterialDesignButton2'
+    Caption = 'FXMaterialButton2'
   end
   object Splitter1: TSplitter
     Left = 227

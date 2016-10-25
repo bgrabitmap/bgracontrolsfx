@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  FXContainer, FXMaterialDesignButton;
+  FXContainer, FXMaterialButton;
 
 type
 
@@ -16,9 +16,9 @@ type
     FXContainer1: TFXContainer;
     FXContainer2: TFXContainer;
     FXContainer3: TFXContainer;
-    FXMaterialDesignButton1: TFXMaterialDesignButton;
-    FXMaterialDesignButton2: TFXMaterialDesignButton;
-    FXMaterialDesignButton3: TFXMaterialDesignButton;
+    FXMaterialButton1: TFXMaterialButton;
+    FXMaterialButton2: TFXMaterialButton;
+    FXMaterialButton3: TFXMaterialButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
   private
