@@ -28,7 +28,7 @@ type
     property Color: TBGRAPixel read FColor write SetFColor;
   end;
 
-  TFXLayers = specialize TFPGList<TFXLayer>;
+  TFXLayers = specialize TFPGObjectList<TFXLayer>;
 
   { TFXGraphicControl }
 
@@ -197,11 +197,7 @@ begin
 end;
 
 destructor TFXGraphicControl.Destroy;
-var
-  i: integer;
 begin
-  for i:=0 to FXLayers.Count-1 do
-    FXLayers[i].Free;
   FreeAndNil(FXLayers);
   inherited Destroy;
 end;
