@@ -16,7 +16,27 @@ type
 
   { TCustomFXButton }
 
-  TCustomFXButton = class(TFXGraphicControl)
+  { TFXBaseButton }
+
+  TFXBaseButton = class(TFXGraphicControl)
+  private
+    FState: TFXButtonStates;
+    FNeedDraw: boolean;
+  protected
+    procedure CalculatePreferredSize(var PreferredWidth, PreferredHeight: integer;
+    {%H-}WithThemeSpace: boolean); override;
+    class function GetControlClassDefaultSize: TSize; override;
+    procedure FontChanged(Sender: TObject); override;
+    procedure SetEnabled(Value: boolean); override;
+    procedure TextChanged; override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
+      X, Y: integer); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: integer); override;
+    procedure MouseEnter; override;
+    procedure MouseLeave; override;
+  end;
+
+  TCustomFXButton = class(TFXBaseButton)
   private
     FColorActive: TColor;
     FColorDisabled: TColor;
@@ -24,8 +44,6 @@ type
     FColorKind: TMaterialColor;
     FColorNormal: TColor;
     FFontColorAutomatic: boolean;
-    FState: TFXButtonStates;
-    FNeedDraw: boolean;
     procedure SetFColorActive(AValue: TColor);
     procedure SetFColorDisabled(AValue: TColor);
     procedure SetFColorHover(AValue: TColor);
@@ -33,18 +51,6 @@ type
     procedure SetFColorNormal(AValue: TColor);
     procedure SetFFontColorAutomatic(AValue: boolean);
   protected
-    procedure CalculatePreferredSize(var PreferredWidth, PreferredHeight: integer;
-    {%H-}WithThemeSpace: boolean); override;
-    class function GetControlClassDefaultSize: TSize; override;
-    procedure TextChanged; override;
-  protected
-    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
-      X, Y: integer); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: integer); override;
-    procedure MouseEnter; override;
-    procedure MouseLeave; override;
-  protected
-    procedure SetEnabled(Value: Boolean); override;
     procedure Draw; override;
     function GetFillColor: TColor;
   public
@@ -108,6 +114,8 @@ type
 
   TFXCustomNativeButton = class(TCustomFXButton)
   protected
+    procedure CalculatePreferredSize(var PreferredWidth, PreferredHeight: integer;
+    {%H-}WithThemeSpace: boolean); override;
     procedure Draw; override;
   end;
 
@@ -220,7 +228,126 @@ begin
   freemem(ASavedAlphaRect);
 end;
 
+{ TFXBaseButton }
+
+procedure TFXBaseButton.CalculatePreferredSize(
+  var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
+var
+  ts: TSize;
+begin
+  inherited CalculatePreferredSize(PreferredWidth, PreferredHeight,
+    WithThemeSpace);
+
+  if Caption <> '' then
+  begin
+    FXLayers[0].BGRA.FontStyle := Font.Style;
+    FXLayers[0].BGRA.FontQuality := fqFineAntialiasing;
+    FXLayers[0].BGRA.FontName := Font.Name;
+    if Font.Height = 0 then
+      FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption)
+    else
+      FXLayers[0].BGRA.FontHeight := Font.Height;
+    FXLayers[0].BGRA.FontAntialias := True;
+
+    ts := FXLayers[0].BGRA.TextSize(Caption);
+    Inc(PreferredWidth, ts.cx + 26);
+    Inc(PreferredHeight, ts.cy + 10);
+  end;
+end;
+
+class function TFXBaseButton.GetControlClassDefaultSize: TSize;
+begin
+  Result := inherited GetControlClassDefaultSize;
+end;
+
+procedure TFXBaseButton.FontChanged(Sender: TObject);
+begin
+  inherited FontChanged(Sender);
+  FNeedDraw := True;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
+end;
+
+procedure TFXBaseButton.SetEnabled(Value: boolean);
+begin
+  inherited SetEnabled(Value);
+  FNeedDraw := True;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
+end;
+
+procedure TFXBaseButton.TextChanged;
+begin
+  InvalidatePreferredSize;
+  if Assigned(Parent) and Parent.AutoSize then
+    Parent.AdjustSize;
+  AdjustSize;
+  FNeedDraw := True;
+  if not (csLoading in ComponentState) then
+    FXInvalidate;
+  inherited TextChanged;
+end;
+
+procedure TFXBaseButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
+  X, Y: integer);
+begin
+  if Button = mbLeft then
+  begin
+    FState := FState + [fxbActive];
+    FNeedDraw := True;
+    FXInvalidate;
+  end;
+  inherited MouseDown(Button, Shift, X, Y);
+end;
+
+procedure TFXBaseButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
+  X, Y: integer);
+begin
+  if Button = mbLeft then
+  begin
+    FState := FState - [fxbActive];
+    FNeedDraw := True;
+    FXInvalidate;
+  end;
+  inherited MouseUp(Button, Shift, X, Y);
+end;
+
+procedure TFXBaseButton.MouseEnter;
+begin
+  FState := FState + [fxbHovered];
+  FNeedDraw := True;
+  FXInvalidate;
+  inherited MouseEnter;
+end;
+
+procedure TFXBaseButton.MouseLeave;
+begin
+  FState := FState - [fxbHovered];
+  FNeedDraw := True;
+  FXInvalidate;
+  inherited MouseLeave;
+end;
+
 { TFXCustomNativeButton }
+
+procedure TFXCustomNativeButton.CalculatePreferredSize(
+  var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
+var
+  ts: TSize;
+begin
+  PreferredWidth := 0;
+  PreferredHeight := 0;
+
+  if Caption <> '' then
+  begin
+    FXLayers[0].BGRA.Canvas.Font := Font;
+
+    ts.cx := FXLayers[0].BGRA.Canvas.Font.GetTextWidth(Caption);
+    ts.cy := FXLayers[0].BGRA.Canvas.Font.GetTextHeight(Caption);
+    Inc(PreferredWidth, ts.cx + 26);
+    Inc(PreferredHeight, ts.cy + 10);
+  end;
+end;
 
 procedure TFXCustomNativeButton.Draw;
 var
@@ -228,7 +355,8 @@ var
   PaintRect: TRect;
   AlphaRect: Pointer;
 begin
-  if (FXLayers[0].BGRA.Width <> ClientWidth) or (FXLayers[0].BGRA.Height <> ClientHeight) then
+  if (FXLayers[0].BGRA.Width <> ClientWidth) or
+    (FXLayers[0].BGRA.Height <> ClientHeight) then
   begin
     FNeedDraw := True;
     FXLayers[0].BGRA.SetSize(ClientWidth, ClientHeight);
@@ -236,42 +364,47 @@ begin
 
   if FNeedDraw then
   begin
-    FXLayers[0].BGRA.FillTransparent;
     {$IFDEF LINUX}
-      FXLayers[0].BGRA.Fill(ColorToBGRA(ColorToRGB(Parent.Color)));
+    FXLayers[0].BGRA.Fill(ColorToBGRA(ColorToRGB(Parent.Color)));
+    {$ELSE}
+    FXLayers[0].BGRA.FillTransparent;
     {$ENDIF}
-      PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
+    PaintRect := Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height);
 
-      if Enabled then
+    if Enabled then
+    begin
+      { Button Down }
+      if fxbActive in FState then
+        Details := ThemeServices.GetElementDetails(tbPushButtonPressed)
+      else
       begin
-        { Button Down }
-        if fxbActive in FState then
-          Details := ThemeServices.GetElementDetails(tbPushButtonPressed)
+        { Button Hovered }
+        if fxbHovered in FState then
+          Details := ThemeServices.GetElementDetails(tbPushButtonHot)
+        { Button Normal }
         else
-        begin
-          { Button Hovered }
-          if fxbHovered in FState then
-            Details := ThemeServices.GetElementDetails(tbPushButtonHot)
-          { Button Normal }
-          else
-            Details := ThemeServices.GetElementDetails(tbPushButtonNormal);
-        end;
-      end
-      { Button Disabled }
-      else
-        Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
+          Details := ThemeServices.GetElementDetails(tbPushButtonNormal);
+      end;
+    end
+    { Button Disabled }
+    else
+      Details := ThemeServices.GetElementDetails(tbPushButtonDisabled);
 
-      ThemeServices.DrawElement(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect, nil);
-      PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect);
-      AlphaRect := SaveAlphaRect(FXLayers[0].BGRA, PaintRect);
-      ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
-        DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
-      RestoreAlphaRectAndFree(FXLayers[0].BGRA, PaintRect.Left, PaintRect.Top, AlphaRect);
+    FXLayers[0].BGRA.Canvas.Font := Font;
 
-      if ColorKind = mcDefault then
-        FXLayers[0].Color := BGRAWhite
-      else
-        FXLayers[0].Color := GetFillColor;
+    ThemeServices.DrawElement(FXLayers[0].BGRA.Canvas.Handle, Details, PaintRect, nil);
+    PaintRect := ThemeServices.ContentRect(FXLayers[0].BGRA.Canvas.Handle,
+      Details, PaintRect);
+    AlphaRect := SaveAlphaRect(FXLayers[0].BGRA, PaintRect);
+    ThemeServices.DrawText(FXLayers[0].BGRA.Canvas, Details, Caption, PaintRect,
+      DT_CENTER or DT_VCENTER or DT_SINGLELINE, 0);
+    RestoreAlphaRectAndFree(FXLayers[0].BGRA, PaintRect.Left,
+      PaintRect.Top, AlphaRect);
+
+    if ColorKind = mcDefault then
+      FXLayers[0].Color := BGRAWhite
+    else
+      FXLayers[0].Color := GetFillColor;
 
     FNeedDraw := False;
     FXLayers[0].Texture := nil;
@@ -340,96 +473,13 @@ begin
     FXInvalidate;
 end;
 
-procedure TCustomFXButton.CalculatePreferredSize(
-  var PreferredWidth, PreferredHeight: integer; WithThemeSpace: boolean);
-var
-  ts: TSize;
-begin
-  inherited CalculatePreferredSize(PreferredWidth, PreferredHeight,
-    WithThemeSpace);
-
-  if Caption <> '' then
-  begin
-    FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
-    FXLayers[0].BGRA.FontAntialias := True;
-
-    ts := FXLayers[0].BGRA.TextSize(Caption);
-    Inc(PreferredWidth, ts.cx + 26);
-    Inc(PreferredHeight, ts.cy + 10);
-  end;
-end;
-
-class function TCustomFXButton.GetControlClassDefaultSize: TSize;
-begin
-  Result := inherited GetControlClassDefaultSize;
-end;
-
-procedure TCustomFXButton.TextChanged;
-begin
-  InvalidatePreferredSize;
-  if Assigned(Parent) and Parent.AutoSize then
-    Parent.AdjustSize;
-  AdjustSize;
-  FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
-  inherited TextChanged;
-end;
-
-procedure TCustomFXButton.MouseDown(Button: TMouseButton; Shift: TShiftState;
-  X, Y: integer);
-begin
-  if Button = mbLeft then
-  begin
-    FState := FState + [fxbActive];
-    FNeedDraw := True;
-    FXInvalidate;
-  end;
-  inherited MouseDown(Button, Shift, X, Y);
-end;
-
-procedure TCustomFXButton.MouseUp(Button: TMouseButton; Shift: TShiftState;
-  X, Y: integer);
-begin
-  if Button = mbLeft then
-  begin
-    FState := FState - [fxbActive];
-    FNeedDraw := True;
-    FXInvalidate;
-  end;
-  inherited MouseUp(Button, Shift, X, Y);
-end;
-
-procedure TCustomFXButton.MouseEnter;
-begin
-  FState := FState + [fxbHovered];
-  FNeedDraw := True;
-  FXInvalidate;
-  inherited MouseEnter;
-end;
-
-procedure TCustomFXButton.MouseLeave;
-begin
-  FState := FState - [fxbHovered];
-  FNeedDraw := True;
-  FXInvalidate;
-  inherited MouseLeave;
-end;
-
-procedure TCustomFXButton.SetEnabled(Value: Boolean);
-begin
-  inherited SetEnabled(Value);
-  FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
-end;
-
 procedure TCustomFXButton.Draw;
 var
   style: TTextStyle;
   fill_color: TColor;
 begin
-  if (FXLayers[0].BGRA.Width <> ClientWidth) or (FXLayers[0].BGRA.Height <> ClientHeight) then
+  if (FXLayers[0].BGRA.Width <> ClientWidth) or
+    (FXLayers[0].BGRA.Height <> ClientHeight) then
   begin
     FNeedDraw := True;
     FXLayers[0].BGRA.SetSize(ClientWidth, ClientHeight);
@@ -441,17 +491,26 @@ begin
 
     style.Alignment := taCenter;
     style.Layout := tlCenter;
-    FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption);
+
+    FXLayers[0].BGRA.FontStyle := Font.Style;
+    FXLayers[0].BGRA.FontQuality := fqFineAntialiasing;
+    FXLayers[0].BGRA.FontName := Font.Name;
+    if Font.Height = 0 then
+      FXLayers[0].BGRA.FontHeight := Font.GetTextHeight(Caption)
+    else
+      FXLayers[0].BGRA.FontHeight := Font.Height;
     FXLayers[0].BGRA.FontAntialias := True;
 
     fill_color := GetFillColor;
     FXLayers[0].BGRA.Fill(fill_color);
 
     if FontColorAutomatic then
-      FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height), 0, 0, Caption, style,
+      FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width,
+        FXLayers[0].BGRA.Height), 0, 0, Caption, style,
         GetContrastColor(fill_color))
     else
-      FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width, FXLayers[0].BGRA.Height), 0, 0, Caption, style, Font.Color);
+      FXLayers[0].BGRA.TextRect(Rect(0, 0, FXLayers[0].BGRA.Width,
+        FXLayers[0].BGRA.Height), 0, 0, Caption, style, Font.Color);
 
     FNeedDraw := False;
     FXLayers[0].Texture := nil;
