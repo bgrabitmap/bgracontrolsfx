@@ -442,6 +442,7 @@ begin
     temp.Free;
   end;
   FNeedDraw := True;
+  FXLayers[0].Texture := nil;
 end;
 
 procedure TFXMaterialButton.DrawTextShadow(AHeight: integer; ATextColor: TColor);
@@ -558,6 +559,8 @@ begin
   end
   else
   begin
+    FXLayers[0].BGRA.FillTransparent;
+    FXLayers[0].Texture := nil;
     FXLayers[1].BGRA.FillTransparent;
     FXLayers[1].Texture := nil;
   end;
