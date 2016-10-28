@@ -8,7 +8,8 @@ unit BGRAControlsFX;
 interface
 
 uses
-  FXButton, FXContainer, fxmaterialbutton, FXProgressBar, LazarusPackageIntf;
+  FXButton, FXContainer, fxmaterialbutton, FXProgressBar, FXRadialProgressBar, 
+  LazarusPackageIntf;
 
 implementation
 
@@ -18,6 +19,7 @@ begin
   RegisterUnit('FXContainer', @FXContainer.Register);
   RegisterUnit('fxmaterialbutton', @fxmaterialbutton.Register);
   RegisterUnit('FXProgressBar', @FXProgressBar.Register);
+  RegisterUnit('FXRadialProgressBar', @FXRadialProgressBar.Register);
 end;
 
 initialization

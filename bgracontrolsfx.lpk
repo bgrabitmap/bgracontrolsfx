@@ -18,7 +18,7 @@
       </CodeGeneration>
     </CompilerOptions>
     <Version Minor="1" Release="5"/>
-    <Files Count="6">
+    <Files Count="7">
       <Item1>
         <Filename Value="fxbutton.pas"/>
         <HasRegisterProc Value="True"/>
@@ -49,6 +49,11 @@
         <HasRegisterProc Value="True"/>
         <UnitName Value="FXProgressBar"/>
       </Item6>
+      <Item7>
+        <Filename Value="fxradialprogressbar.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="fxradialprogressbar"/>
+      </Item7>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>
