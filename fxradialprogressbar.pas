@@ -93,8 +93,7 @@ begin
     FValue := FMaxValue;
   if FMinValue > FMaxValue then
     FMinValue := FMaxValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFLineBkgColor(AValue: TColor);
@@ -102,8 +101,7 @@ begin
   if FLineBkgColor = AValue then
     Exit;
   FLineBkgColor := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFFontShadowColor(AValue: TColor);
@@ -111,8 +109,7 @@ begin
   if FFontShadowColor = AValue then
     Exit;
   FFontShadowColor := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFFontShadowOffsetX(AValue: integer);
@@ -120,8 +117,7 @@ begin
   if FFontShadowOffsetX = AValue then
     Exit;
   FFontShadowOffsetX := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFFontShadowOffsetY(AValue: integer);
@@ -129,8 +125,7 @@ begin
   if FFontShadowOffsetY = AValue then
     Exit;
   FFontShadowOffsetY := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFFontShadowRadius(AValue: integer);
@@ -138,8 +133,7 @@ begin
   if FFontSHadowRadius = AValue then
     Exit;
   FFontSHadowRadius := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetFLineColor(AValue: TColor);
@@ -147,8 +141,7 @@ begin
   if FLineColor = AValue then
     Exit;
   FLineColor := AValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetMinValue(AValue: integer);
@@ -160,8 +153,7 @@ begin
     FValue := FMinValue;
   if FMaxValue < FMinValue then
     FMaxValue := FMinValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.SetValue(AValue: integer);
@@ -173,8 +165,7 @@ begin
     FValue := FMinValue;
   if FValue > FMaxValue then
     FValue := FMaxValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXRadialProgressBar.CalculatePreferredSize(

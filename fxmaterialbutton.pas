@@ -153,8 +153,7 @@ begin
     Exit;
   FRoundBorders := AValue;
   UpdateShadow;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFShadow(AValue: boolean);
@@ -165,8 +164,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   UpdateShadow;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFShadowColor(AValue: TColor);
@@ -175,8 +173,7 @@ begin
     Exit;
   FShadowColor := AValue;
   UpdateShadow;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFShadowSize(AValue: integer);
@@ -187,8 +184,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   UpdateShadow;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextColor(AValue: TColor);
@@ -197,8 +193,7 @@ begin
     Exit;
   FTextColor := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextFont(AValue: string);
@@ -209,8 +204,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextQuality(AValue: TBGRAFontQuality);
@@ -221,8 +215,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextShadow(AValue: boolean);
@@ -233,8 +226,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextShadowColor(AValue: TColor);
@@ -243,8 +235,7 @@ begin
     Exit;
   FTextShadowColor := AValue;
   UpdateShadow;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextShadowOffsetX(AValue: integer);
@@ -255,8 +246,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextShadowOffsetY(AValue: integer);
@@ -267,8 +257,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextShadowSize(AValue: integer);
@@ -279,8 +268,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextSize(AValue: integer);
@@ -291,8 +279,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFTextStyle(AValue: TFontStyles);
@@ -303,8 +290,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.CalculatePreferredSize(
@@ -341,8 +327,7 @@ begin
     Exit;
   FNormalColor := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFColorKind(AValue: TMaterialColor);
@@ -351,8 +336,7 @@ begin
     Exit;
   FColorKind := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFFontColorAutomatic(AValue: boolean);
@@ -361,8 +345,7 @@ begin
     Exit;
   FFontColorAutomatic := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.SetFNormalColorEffect(AValue: TColor);
@@ -371,8 +354,7 @@ begin
     Exit;
   FNormalColorEffect := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.OnStartTimer(Sender: TObject);
@@ -396,8 +378,7 @@ begin
     FCircleAlpha := 0;
   if FCircleAlpha <= 0 then
     FTimer.Enabled := False;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.MouseDown(Button: TMouseButton;
@@ -423,8 +404,7 @@ begin
   InvalidatePreferredSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXMaterialButton.UpdateShadow;

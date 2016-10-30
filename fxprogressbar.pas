@@ -85,8 +85,7 @@ begin
     FValue := FMinValue;
   if FMaxValue < FMinValue then
     FMaxValue := FMinValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXProgressBar.SetValue(const AValue: integer);
@@ -98,8 +97,7 @@ begin
     FValue := FMinValue;
   if FValue > FMaxValue then
     FValue := FMaxValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 {$hints off}
@@ -263,8 +261,7 @@ begin
     FValue := FMaxValue;
   if FMinValue > FMaxValue then
     FMinValue := FMaxValue;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 end.

@@ -36,12 +36,12 @@ type
   protected
     FXLayers: TFXLayers;
   protected
-    procedure FXInvalidate;
     procedure FXDraw; virtual;
     procedure FXPreview(var aCanvas: TCanvas);
     procedure Draw; virtual;
     procedure Paint; override;
-    procedure DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel; Dest: TCanvas; x, y: integer; Opaque: boolean = True);
+    procedure DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel;
+      Dest: TCanvas; x, y: integer; Opaque: boolean = True);
     procedure Colorize(Source, Dest: TBGRABitmap; c: TBGRAPixel);
   public
     constructor Create(TheOwner: TComponent); override;
@@ -54,8 +54,9 @@ implementation
 
 procedure TFXLayer.SetFTexture(AValue: IBGLTexture);
 begin
-  if FTexture=AValue then Exit;
-  FTexture:=AValue;
+  if FTexture = AValue then
+    Exit;
+  FTexture := AValue;
 end;
 
 constructor TFXLayer.Create;
@@ -75,47 +76,30 @@ end;
 
 procedure TFXLayer.SetFBGRA(AValue: TBGRABitmap);
 begin
-  if FBGRA=AValue then Exit;
-  FBGRA:=AValue;
+  if FBGRA = AValue then
+    Exit;
+  FBGRA := AValue;
 end;
 
 procedure TFXLayer.SetFColor(AValue: TBGRAPixel);
 begin
-  if FColor=AValue then Exit;
-  FColor:=AValue;
+  if FColor = AValue then
+    Exit;
+  FColor := AValue;
 end;
 
 { TFXGraphicControl }
-
-procedure TFXGraphicControl.FXInvalidate;
-begin
-  if (csDesigning in ComponentState) then
-    Invalidate
-  else
-  begin
-    if Parent is TFXContainer then
-    begin
-      if TFXContainer(Parent).ReceivePaintFrom = nil then
-        Parent.Invalidate;
-    end
-    else
-      Invalidate;
-  end;
-end;
 
 procedure TFXGraphicControl.FXDraw;
 var
   i: integer;
 begin
-  if (csDesigning in ComponentState) then
-    exit;
-
   Draw;
-  for i:=0 to FXLayers.Count-1 do
+  for i := 0 to FXLayers.Count - 1 do
   begin
     if (FXLayers[i].Texture = nil) then
       FXLayers[i].Texture := BGLTexture(FXLayers[i].BGRA);
-      BGLCanvas.PutImage(Left, Top, FXLayers[i].Texture, FXLayers[i].Color);
+    BGLCanvas.PutImage(Left, Top, FXLayers[i].Texture, FXLayers[i].Color);
   end;
 end;
 
@@ -124,7 +108,7 @@ var
   i: integer;
 begin
   Draw;
-  for i:=0 to FXLayers.Count-1 do
+  for i := 0 to FXLayers.Count - 1 do
   begin
     if FXLayers[i].Color <> BGRAWhite then
       DrawWithColor(FXLayers[i].BGRA, FXLayers[i].Color, aCanvas, Left, Top, False)
@@ -146,19 +130,26 @@ procedure TFXGraphicControl.Paint;
 var
   i: integer;
 begin
-  if (Parent is TFXContainer) then
+  if csLoading in ComponentState then
     exit;
-  Draw;
-  for i:=0 to FXLayers.Count-1 do
+
+  if Parent is TFXContainer then
+      Parent.Invalidate
+  else
   begin
-    if FXLayers[i].Color <> BGRAWhite then
-      DrawWithColor(FXLayers[i].BGRA, FXLayers[i].Color, Canvas, 0, 0, False)
-    else
-      FXLayers[i].BGRA.Draw(Canvas, 0, 0, False);
+    Draw;
+    for i := 0 to FXLayers.Count - 1 do
+    begin
+      if FXLayers[i].Color <> BGRAWhite then
+        DrawWithColor(FXLayers[i].BGRA, FXLayers[i].Color, Canvas, 0, 0, False)
+      else
+        FXLayers[i].BGRA.Draw(Canvas, 0, 0, False);
+    end;
   end;
 end;
 
-procedure TFXGraphicControl.DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel; Dest: TCanvas; x, y: integer; Opaque: boolean = True);
+procedure TFXGraphicControl.DrawWithColor(Source: TBGRABitmap;
+  c: TBGRAPixel; Dest: TCanvas; x, y: integer; Opaque: boolean = True);
 var
   temp: TBGRABitmap;
 begin
@@ -178,14 +169,17 @@ begin
   psource := Source.Data;
   pdest := Dest.Data;
   ec := GammaExpansion(c);
-  for n := source.NbPixels-1 downto 0 do
+  for n := Source.NbPixels - 1 downto 0 do
   begin
-    pdest^.red := GammaCompressionTab[((GammaExpansionTab[psource^.red]*ec.red+65535) shr 16)];
-    pdest^.green := GammaCompressionTab[((GammaExpansionTab[psource^.green]*ec.green+65535) shr 16)];
-    pdest^.blue := GammaCompressionTab[((GammaExpansionTab[psource^.blue]*ec.blue+65535) shr 16)];
-    pdest^.alpha := (psource^.alpha*ec.alpha+255) shr 16;
-    inc(pdest);
-    inc(psource);
+    pdest^.red := GammaCompressionTab[
+      ((GammaExpansionTab[psource^.red] * ec.red + 65535) shr 16)];
+    pdest^.green := GammaCompressionTab[
+      ((GammaExpansionTab[psource^.green] * ec.green + 65535) shr 16)];
+    pdest^.blue := GammaCompressionTab[
+      ((GammaExpansionTab[psource^.blue] * ec.blue + 65535) shr 16)];
+    pdest^.alpha := (psource^.alpha * ec.alpha + 255) shr 16;
+    Inc(pdest);
+    Inc(psource);
   end;
 end;
 

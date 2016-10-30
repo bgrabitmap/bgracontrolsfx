@@ -264,16 +264,14 @@ procedure TFXBaseButton.FontChanged(Sender: TObject);
 begin
   inherited FontChanged(Sender);
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXBaseButton.SetEnabled(Value: boolean);
 begin
   inherited SetEnabled(Value);
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TFXBaseButton.TextChanged;
@@ -283,8 +281,7 @@ begin
     Parent.AdjustSize;
   AdjustSize;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
   inherited TextChanged;
 end;
 
@@ -295,7 +292,7 @@ begin
   begin
     FState := FState + [fxbActive];
     FNeedDraw := True;
-    FXInvalidate;
+    Invalidate;
   end;
   inherited MouseDown(Button, Shift, X, Y);
 end;
@@ -307,7 +304,7 @@ begin
   begin
     FState := FState - [fxbActive];
     FNeedDraw := True;
-    FXInvalidate;
+    Invalidate;
   end;
   inherited MouseUp(Button, Shift, X, Y);
 end;
@@ -316,7 +313,7 @@ procedure TFXBaseButton.MouseEnter;
 begin
   FState := FState + [fxbHovered];
   FNeedDraw := True;
-  FXInvalidate;
+  Invalidate;
   inherited MouseEnter;
 end;
 
@@ -324,7 +321,7 @@ procedure TFXBaseButton.MouseLeave;
 begin
   FState := FState - [fxbHovered];
   FNeedDraw := True;
-  FXInvalidate;
+  Invalidate;
   inherited MouseLeave;
 end;
 
@@ -419,8 +416,7 @@ begin
     Exit;
   FColorActive := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.SetFColorDisabled(AValue: TColor);
@@ -429,8 +425,7 @@ begin
     Exit;
   FColorDisabled := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.SetFColorHover(AValue: TColor);
@@ -439,8 +434,7 @@ begin
     Exit;
   FColorHover := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.SetFColorKind(AValue: TMaterialColor);
@@ -449,8 +443,7 @@ begin
     Exit;
   FColorKind := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.SetFColorNormal(AValue: TColor);
@@ -459,8 +452,7 @@ begin
     Exit;
   FColorNormal := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.SetFFontColorAutomatic(AValue: boolean);
@@ -469,8 +461,7 @@ begin
     Exit;
   FFontColorAutomatic := AValue;
   FNeedDraw := True;
-  if not (csLoading in ComponentState) then
-    FXInvalidate;
+  Invalidate;
 end;
 
 procedure TCustomFXButton.Draw;
