@@ -25,7 +25,6 @@ type
   private
     FCanvas: TCanvas;
     FLockReceivePaint: boolean;
-    FReceivePaintFrom: TComponent;
   protected
     procedure WMPaint(var Message: TLMPaint); message LM_PAINT;
     procedure DrawChilds;
