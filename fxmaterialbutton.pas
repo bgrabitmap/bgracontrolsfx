@@ -37,7 +37,9 @@ type
     FMousePos: TPoint;
     FCircleSize: single;
     FCircleAlpha: byte;
+    FCircular: boolean;
     FNeedDraw: boolean;
+    procedure SetFCircular(AValue: boolean);
     procedure SetFColorKind(AValue: TMaterialColor);
     procedure SetFFontColorAutomatic(AValue: boolean);
     procedure SetFNormalColor(AValue: TColor);
@@ -73,6 +75,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
+    property Circular: boolean read FCircular write SetFCircular default false;
     property RoundBorders: single read FRoundBorders write SetFRoundBorders default 5;
     property ColorKind: TMaterialColor read FColorKind write SetFColorKind;
     property FontColorAutomatic: boolean read FFontColorAutomatic
@@ -319,6 +322,11 @@ begin
     Inc(PreferredWidth, FShadowSize * 2);
     Inc(PreferredHeight, FShadowSize * 2);
   end;
+
+  if FCircular then
+  begin
+    PreferredHeight := PreferredWidth;
+  end;
 end;
 
 procedure TFXMaterialButton.SetFNormalColor(AValue: TColor);
@@ -336,6 +344,16 @@ begin
     Exit;
   FColorKind := AValue;
   FNeedDraw := True;
+  Invalidate;
+end;
+
+procedure TFXMaterialButton.SetFCircular(AValue: boolean);
+begin
+  if FCircular=AValue then Exit;
+  FCircular:=AValue;
+  InvalidatePreferredSize;
+  AdjustSize;
+  UpdateShadow;
   Invalidate;
 end;
 
@@ -414,9 +432,12 @@ begin
   FXLayers[0].BGRA.FillTransparent;
   if FShadow then
   begin
-    FXLayers[0].BGRA.RoundRectAntialias(FShadowSize, FShadowSize, Width - FShadowSize,
-      Height - FShadowSize, FRoundBorders, FRoundBorders,
-      FShadowColor, 1, FShadowColor, [rrDefault]);
+    if not FCircular then
+      FXLayers[0].BGRA.RoundRectAntialias(FShadowSize, FShadowSize, Width - FShadowSize,
+        Height - FShadowSize, FRoundBorders, FRoundBorders,
+        FShadowColor, 1, FShadowColor, [rrDefault])
+    else
+      FXLayers[0].BGRA.FillEllipseAntialias(Width div 2, Height div 2, (Width div 2) - FShadowSize, (Width div 2) - FShadowSize, FShadowColor);
     temp := FXLayers[0].BGRA.FilterBlurRadial(FShadowSize /
       sqrt(2), FShadowSize / sqrt(2), rbBox) as TBGRABitmap;
     FXLayers[0].BGRA.Assign(temp);
@@ -508,18 +529,30 @@ begin
         round_rect_left := FShadowSize;
         round_rect_width := ClientWidth - FShadowSize;
         round_rect_height := ClientHeight - FShadowSize;
+        if FCircular then
+        begin
+          round_rect_width := (Width div 2) - FShadowSize;
+          round_rect_height := (Height - FShadowSize) div 2;
+        end;
       end
       else
       begin
         round_rect_left := 0;
         round_rect_width := ClientWidth;
         round_rect_height := ClientHeight;
+        if FCircular then
+        begin
+          round_rect_width := Width div 2;
+          round_rect_height := Height div 2;
+        end;
       end;
 
+      if not FCircular then
       FXLayers[1].BGRA.FillRoundRectAntialias(round_rect_left, 0, round_rect_width,
         round_rect_height,
-        FRoundBorders, FRoundBorders, temp, [rrDefault], False);
-
+        FRoundBorders, FRoundBorders, temp, [rrDefault], False)
+      else
+        FXLayers[1].BGRA.FillEllipseAntialias(Width div 2, round_rect_height, round_rect_width, round_rect_width, temp);
       temp.Free;
 
       if Caption <> '' then
