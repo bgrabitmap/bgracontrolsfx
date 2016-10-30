@@ -1,4 +1,4 @@
-unit fxmaterialbutton;
+unit FXMaterialButton;
 
 {$mode objfpc}{$H+}
 
@@ -141,6 +141,7 @@ implementation
 
 procedure Register;
 begin
+  {$I icons\fxmaterialbutton_icon.lrs}
   RegisterComponents('BGRA Controls FX', [TFXMaterialButton]);
 end;
 

@@ -17,7 +17,7 @@
         </Optimizations>
       </CodeGeneration>
     </CompilerOptions>
-    <Version Minor="1" Release="5"/>
+    <Version Minor="1" Release="6"/>
     <Files Count="7">
       <Item1>
         <Filename Value="fxbutton.pas"/>

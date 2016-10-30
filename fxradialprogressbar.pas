@@ -78,6 +78,7 @@ implementation
 
 procedure Register;
 begin
+  {$I icons\fxradialprogressbar_icon.lrs}
   RegisterComponents('BGRA Controls FX', [TFXRadialProgressBar]);
 end;
 

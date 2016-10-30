@@ -96,6 +96,7 @@ implementation
 
 procedure Register;
 begin
+  {$I icons\fxcontainer_icon.lrs}
   RegisterComponents('BGRA Controls FX', [TFXContainer]);
 end;
 

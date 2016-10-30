@@ -70,6 +70,7 @@ uses BGRABitmapTypes, BGRAGradients, Types;
 
 procedure Register;
 begin
+  {$I icons\fxprogressbar_icon.lrs}
   RegisterComponents('BGRA Controls FX', [TFXProgressBar]);
 end;
 
