@@ -16,7 +16,7 @@ type
   IFXDrawable = interface
     [SFXDrawable]
     procedure FXDraw;
-    procedure FXPreview(var aCanvas: TCanvas);
+    procedure FXPreview(aCanvas: TCanvas);
   end;
 
   { TCustomFXContainer }

@@ -37,7 +37,7 @@ type
     FXLayers: TFXLayers;
   protected
     procedure FXDraw; virtual;
-    procedure FXPreview(var aCanvas: TCanvas);
+    procedure FXPreview(aCanvas: TCanvas);
     procedure Draw; virtual;
     procedure Paint; override;
     procedure DrawWithColor(Source: TBGRABitmap; c: TBGRAPixel;
@@ -103,7 +103,7 @@ begin
   end;
 end;
 
-procedure TFXGraphicControl.FXPreview(var aCanvas: TCanvas);
+procedure TFXGraphicControl.FXPreview(aCanvas: TCanvas);
 var
   i: integer;
 begin
