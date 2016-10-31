@@ -4,11 +4,10 @@
 
 unit BGRAControlsFX;
 
-{$warn 5023 off : no warning about unused units}
 interface
 
 uses
-  FXButton, FXContainer, fxmaterialbutton, FXProgressBar, FXRadialProgressBar, 
+  FXButton, FXContainer, FXMaterialButton, FXProgressBar, FXRadialProgressBar, 
   LazarusPackageIntf;
 
 implementation
@@ -17,7 +16,7 @@ procedure Register;
 begin
   RegisterUnit('FXButton', @FXButton.Register);
   RegisterUnit('FXContainer', @FXContainer.Register);
-  RegisterUnit('fxmaterialbutton', @fxmaterialbutton.Register);
+  RegisterUnit('FXMaterialButton', @FXMaterialButton.Register);
   RegisterUnit('FXProgressBar', @FXProgressBar.Register);
   RegisterUnit('FXRadialProgressBar', @FXRadialProgressBar.Register);
 end;
