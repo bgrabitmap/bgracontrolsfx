@@ -24,6 +24,12 @@ object frmMain: TfrmMain
       Top = 8
       Width = 127
       Caption = 'Hello'
+      ColorKind = mcDefault
+      ColorNormal = clWhite
+      ColorHover = clSilver
+      ColorActive = clMedGray
+      ColorDisabled = clGray
+      FontColorAutomatic = True
       OnClick = FXButton1Click
     end
     object FXButton2: TFXButton
@@ -32,6 +38,12 @@ object frmMain: TfrmMain
       Top = 80
       Width = 127
       Caption = 'Other'
+      ColorKind = mcDefault
+      ColorNormal = clWhite
+      ColorHover = clSilver
+      ColorActive = clMedGray
+      ColorDisabled = clGray
+      FontColorAutomatic = True
       OnClick = FXButton2Click
     end
     object FXButton3: TFXButton
@@ -40,6 +52,12 @@ object frmMain: TfrmMain
       Top = 8
       Width = 127
       Caption = 'Third'
+      ColorKind = mcDefault
+      ColorNormal = clWhite
+      ColorHover = clSilver
+      ColorActive = clMedGray
+      ColorDisabled = clGray
+      FontColorAutomatic = True
       Enabled = False
     end
     object FXMaterialButton2: TFXMaterialButton
@@ -58,10 +76,11 @@ object frmMain: TfrmMain
       Caption = 'FXMaterialButton2'
     end
     object FXMaterialButton3: TFXMaterialButton
-      Left = 694
-      Height = 72
-      Top = 312
-      Width = 83
+      Left = 696
+      Height = 79
+      Top = 309
+      Width = 79
+      Circular = True
       RoundBorders = 35
       ColorKind = mcDefault
       FontColorAutomatic = True
@@ -70,6 +89,7 @@ object frmMain: TfrmMain
       TextShadow = False
       TextFont = 'default'
       Anchors = []
+      AutoSize = True
       Caption = 'FX'
     end
   end
