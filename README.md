@@ -20,4 +20,10 @@ A button control that's looks the same as the OS button. It contains ColorKind l
 The control that contains the OpenGL window. Put all the controls in top of this control to get hardware acceleration.
 
 # TFXMaterialButton
-A button with Material Design look, with shadow, rounded borders, text with shadow and "ripple effect".
+A button with Material Design look, with shadow, rounded borders, text with shadow and "ripple effect". Ported from BGRA Controls.
+
+# TFXProgressBar
+A progress bar ported from BGRA Controls.
+
+# TFXRadialProgressBar
+A progress bar ported from BGRA Controls.
