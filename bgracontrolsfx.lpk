@@ -4,6 +4,7 @@
     <PathDelim Value="\"/>
     <Name Value="BGRAControlsFX"/>
     <Type Value="RunAndDesignTime"/>
+    <Author Value="Lainz, Circular"/>
     <CompilerOptions>
       <Version Value="11"/>
       <PathDelim Value="\"/>
@@ -17,6 +18,8 @@
         </Optimizations>
       </CodeGeneration>
     </CompilerOptions>
+    <Description Value="OpenGL Controls for Lazarus."/>
+    <License Value="Modified LGPL"/>
     <Version Minor="1" Release="6"/>
     <Files Count="8">
       <Item1>
