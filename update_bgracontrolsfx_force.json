@@ -1,0 +1,13 @@
+{
+  "UpdatePackageData" : {
+    "DownloadZipURL" : "https://github.com/bgrabitmap/bgracontrolsfx/archive/master.zip",
+    "ForceNotify" : true,
+    "Name" : "master.zip"
+  },
+  "UpdatePackageFiles" : [
+    {
+      "Name" : "bgracontrolsfx.lpk",
+      "Version" : "0.1.6.0"
+    }
+  ]
+}
