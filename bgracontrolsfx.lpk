@@ -20,7 +20,7 @@
     </CompilerOptions>
     <Description Value="OpenGL Controls for Lazarus."/>
     <License Value="Modified LGPL"/>
-    <Version Minor="1" Release="6"/>
+    <Version Minor="1" Release="6" Build="1"/>
     <Files Count="8">
       <Item1>
         <Filename Value="fxbutton.pas"/>
