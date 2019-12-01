@@ -1,3 +1,5 @@
+# Not maintained anymore, please use bgracontrols
+
 # BGRA Controls FX
 OpenGL Controls for Lazarus.
 
